@@ -1,0 +1,1624 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coco 小铺 · 幸运大抽奖</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red:     #CC0000;
+      --red-dark:#A00000;
+      --gold:    #C9A84C;
+      --gold-lt: #F0D080;
+      --bg:      #FDF8F0;
+      --sidebar: #FAF2E4;
+      --white:   #FFFFFF;
+      --card:    #FFFFFF;
+      --text:    #2D2D2D;
+      --muted:   #888;
+      --border:  rgba(201,168,76,0.25);
+      --sidebar-w: 240px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Noto Sans SC", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── Confetti ── */
+    .confetti-wrap {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .confetti-piece {
+      position: absolute;
+      top: -20px;
+      width: 8px;
+      height: 16px;
+      border-radius: 2px;
+      opacity: 0;
+      animation: confettiFall linear infinite;
+    }
+
+    @keyframes confettiFall {
+      0%   { opacity: 0.8; transform: translateY(0) rotate(0deg); }
+      100% { opacity: 0;   transform: translateY(110vh) rotate(720deg); }
+    }
+
+    /* ── HEADER ── */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 200;
+      height: 62px;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 14px;
+      box-shadow: 0 2px 16px rgba(204,0,0,0.25);
+    }
+
+    .header-logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.3);
+      flex-shrink: 0;
+      background: rgba(255,255,255,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .header-logo img { width: 100%; height: 100%; object-fit: cover; }
+
+    .logo-ph {
+      font-size: 9px;
+      color: rgba(255,255,255,0.9);
+      text-align: center;
+      line-height: 1.3;
+      font-weight: 700;
+    }
+
+    .header-info { flex: 1; }
+
+    .header-company {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: 0.3px;
+      line-height: 1.3;
+    }
+
+    .header-tagline {
+      font-size: 10px;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.5px;
+    }
+
+    .header-help {
+      font-size: 13px;
+      padding: 7px 16px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.4);
+      background: rgba(255,255,255,0.12);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .header-help:hover { background: rgba(255,255,255,0.22); }
+
+    /* ── Mobile tab nav ── */
+    .mobile-nav {
+      display: none;
+      position: sticky;
+      top: 62px;
+      z-index: 190;
+      background: var(--sidebar);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .mobile-nav::-webkit-scrollbar { display: none; }
+
+    .mobile-nav-inner {
+      display: flex;
+      gap: 0;
+      white-space: nowrap;
+      padding: 0 4px;
+    }
+
+    .mobile-nav a {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      flex-shrink: 0;
+    }
+
+    .mobile-nav a.active,
+    .mobile-nav a:hover {
+      color: var(--red);
+      border-bottom-color: var(--red);
+    }
+
+    /* ── Body layout ── */
+    .body-wrap {
+      display: flex;
+      min-height: calc(100vh - 62px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: var(--sidebar);
+      border-right: 1px solid var(--border);
+      position: sticky;
+      top: 62px;
+      height: calc(100vh - 62px);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      scrollbar-width: thin;
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .sidebar-logo-area {
+      padding: 28px 20px 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sidebar-logo-circle {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      overflow: hidden;
+      margin: 0 auto 12px;
+      background: #fff;
+      box-shadow: 0 4px 16px rgba(201,168,76,0.2);
+    }
+
+    .sidebar-logo-circle img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .sidebar-logo-ph {
+      width: 100%;
+      height: 100%;
+      background: var(--red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 900;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    .sidebar-brand {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.4;
+    }
+
+    .sidebar-brand-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Nav links */
+    .sidebar-nav {
+      padding: 16px 12px;
+      flex: 1;
+    }
+
+    .nav-label {
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      padding: 0 8px;
+      margin-bottom: 6px;
+      margin-top: 8px;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 11px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      color: var(--text);
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      margin-bottom: 2px;
+      border: 1px solid transparent;
+    }
+
+    .nav-item .nav-icon { font-size: 17px; flex-shrink: 0; }
+
+    .nav-item:hover {
+      background: rgba(204,0,0,0.06);
+      color: var(--red);
+    }
+
+    .nav-item.active {
+      background: rgba(204,0,0,0.08);
+      color: var(--red);
+      border-color: rgba(204,0,0,0.15);
+      font-weight: 600;
+    }
+
+    /* Sidebar bottom */
+    .sidebar-bottom {
+      padding: 16px 16px 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .fb-btn-side {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px;
+      background: #1877F2;
+      color: #fff;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      transition: opacity 0.2s;
+    }
+
+    .fb-btn-side:hover { opacity: 0.88; }
+    .fb-icon { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
+
+    .phone-list { display: flex; flex-direction: column; gap: 6px; }
+
+    .phone-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: border-color 0.2s;
+    }
+
+    .phone-item:hover { border-color: var(--gold); color: var(--red); }
+
+    /* ── MAIN CONTENT ── */
+    .main-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      padding: 48px 40px 36px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fff9f0 0%, #fdf8f0 100%);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px; right: -60px;
+      width: 320px; height: 320px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(204,0,0,0.06) 0%, transparent 70%);
+    }
+
+    .hero-layout {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-text { flex: 1; }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 14px;
+      text-transform: uppercase;
+    }
+
+    .hero-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(32px, 4vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--red);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-title::after {
+      content: '';
+      position: absolute;
+      top: 0; left: -8%; right: -8%;
+      bottom: 0;
+      background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.7) 40%,
+        rgba(255,215,100,0.5) 50%,
+        rgba(255,255,255,0.7) 60%,
+        transparent 100%);
+      background-size: 300% 100%;
+      animation: titleShimmer 3s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes titleShimmer {
+      0%   { background-position: 200% center; }
+      100% { background-position: -100% center; }
+    }
+
+    .hero-title-zh {
+      display: block;
+      font-size: clamp(38px, 5vw, 60px);
+    }
+
+    .hero-subtitle {
+      margin-top: 16px;
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .hero-subtitle strong { color: var(--red); }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .hero-tag {
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .hero-tag.red {
+      background: rgba(204,0,0,0.08);
+      color: var(--red);
+      border: 1px solid rgba(204,0,0,0.2);
+    }
+
+    .hero-tag.gold {
+      background: rgba(201,168,76,0.1);
+      color: #8a6a00;
+      border: 1px solid rgba(201,168,76,0.3);
+    }
+
+    /* Hero poster */
+    .hero-poster {
+      flex-shrink: 0;
+      width: 260px;
+      position: relative;
+    }
+
+    .hero-poster img {
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      display: block;
+    }
+
+    .poster-badge {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #5a3c00;
+      text-align: center;
+      line-height: 1.3;
+      box-shadow: 0 4px 14px rgba(201,168,76,0.4);
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+
+    @keyframes badgePulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.06); }
+    }
+
+    .poster-badge .big { font-size: 15px; }
+
+    /* ── Section styles ── */
+    .section {
+      padding: 48px 40px;
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+    }
+
+    .section:last-child { border-bottom: none; }
+
+    .sec-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .sec-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(204,0,0,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+
+    .sec-title-text {
+      font-size: clamp(18px, 3vw, 24px);
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .sec-title-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* ── Query ── */
+    #query {
+      background: linear-gradient(135deg, rgba(204,0,0,0.04) 0%, rgba(201,168,76,0.06) 100%);
+    }
+
+    .query-card {
+      background: var(--card);
+      border-radius: 16px;
+      border: 1.5px solid rgba(204,0,0,0.2);
+      padding: 32px;
+      box-shadow: 0 6px 32px rgba(204,0,0,0.08), 0 2px 8px rgba(0,0,0,0.06);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .query-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
+      background-size: 200% 100%;
+      animation: borderFlow 3s linear infinite;
+    }
+
+    @keyframes borderFlow {
+      0%   { background-position: 0% center; }
+      100% { background-position: 200% center; }
+    }
+
+    .query-btn {
+      animation: btnPulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { box-shadow: 0 4px 14px rgba(204,0,0,0.2); }
+      50%       { box-shadow: 0 6px 22px rgba(204,0,0,0.38); }
+    }
+
+    .query-btn:hover {
+      animation: none;
+    }
+
+    .query-hint {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 18px;
+      line-height: 1.7;
+    }
+
+    .query-hint strong { color: var(--red); }
+
+    .input-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .query-input {
+      flex: 1;
+      min-width: 200px;
+      padding: 13px 18px;
+      font-size: 15px;
+      font-family: "Noto Sans SC", sans-serif;
+      background: var(--bg);
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .query-input::placeholder { color: #bbb; }
+
+    .query-input:focus {
+      border-color: var(--red);
+      box-shadow: 0 0 0 3px rgba(204,0,0,0.08);
+    }
+
+    .query-btn {
+      padding: 13px 28px;
+      font-size: 15px;
+      font-weight: 700;
+      font-family: "Noto Sans SC", sans-serif;
+      background: linear-gradient(135deg, var(--red), var(--red-dark));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+
+    .query-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(204,0,0,0.3);
+    }
+
+    /* ── Results ── */
+    #result-area { margin-top: 24px; }
+
+    .loading-state {
+      text-align: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(204,0,0,0.15);
+      border-top-color: var(--red);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 14px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .loading-state p { font-size: 14px; color: var(--muted); }
+
+    .no-result {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .no-result .icon { font-size: 44px; display: block; margin-bottom: 12px; }
+
+    /* Ticket strip scroll */
+    .tickets-scroll {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      scrollbar-width: thin;
+    }
+
+    .tickets-scroll::-webkit-scrollbar { height: 4px; }
+    .tickets-scroll::-webkit-scrollbar-track { background: var(--bg); border-radius: 2px; }
+    .tickets-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .ticket-card {
+      flex-shrink: 0;
+      width: 240px;
+      background: var(--card);
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+      animation: ticketIn 0.35s ease both;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .ticket-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(204,0,0,0.12);
+    }
+
+    @keyframes ticketIn {
+      from { opacity: 0; transform: scale(0.9) translateY(10px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .ticket-top {
+      background: linear-gradient(135deg, var(--red), var(--red-dark));
+      padding: 20px 18px 16px;
+      text-align: center;
+      position: relative;
+    }
+
+    .ticket-top::after {
+      content: '';
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      height: 12px;
+      background: var(--card);
+      border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+    }
+
+    .ticket-num-label {
+      font-size: 9px;
+      letter-spacing: 3px;
+      color: rgba(255,255,255,0.65);
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .ticket-number {
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .ticket-gold-line {
+      width: 40px;
+      height: 2px;
+      background: var(--gold-lt);
+      margin: 8px auto 0;
+      border-radius: 1px;
+    }
+
+    .ticket-body {
+      padding: 20px 18px 18px;
+    }
+
+    .ticket-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .ticket-row:last-child { margin-bottom: 0; }
+
+    .t-key { color: var(--muted); font-size: 11px; }
+    .t-val { color: var(--text); font-weight: 600; text-align: right; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .t-val.amount { color: var(--red); }
+    .t-val.count { background: rgba(201,168,76,0.12); color: #7a5c00; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
+
+    /* Summary */
+    .summary-bar {
+      margin-top: 20px;
+      padding: 20px 24px;
+      background: linear-gradient(135deg, rgba(204,0,0,0.05), rgba(201,168,76,0.08));
+      border: 1px solid rgba(204,0,0,0.12);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      animation: ticketIn 0.4s 0.1s ease both;
+    }
+
+    .summary-count {
+      font-size: 54px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .summary-info { font-size: 14px; color: var(--muted); line-height: 1.8; }
+    .summary-info strong { color: var(--text); font-size: 16px; }
+
+    /* ── Prizes ── */
+    .prizes-wrap {
+      position: relative;
+    }
+
+    .prizes-img-container {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
+    }
+
+    .prizes-img-container img {
+      width: 100%;
+      display: block;
+    }
+
+    .prizes-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 20px 24px;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
+    }
+
+    .prizes-overlay-text {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .prizes-overlay-text strong { color: var(--gold-lt); font-size: 18px; }
+
+    /* ── Full-width Banner ── */
+    .full-banner {
+      width: 100%;
+      overflow: hidden;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .full-banner img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ── About ── */
+    .about-layout {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .about-text-col { flex: 1; }
+
+    .about-text-col p {
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .about-text-col p strong { color: var(--text); }
+
+    .fb-btn-main {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: #1877F2;
+      color: #fff;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-top: 8px;
+    }
+
+    .fb-btn-main:hover {
+      background: #1565d8;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(24,119,242,0.3);
+    }
+
+    /* ── Terms accordion ── */
+    .terms-intro {
+      background: rgba(204,0,0,0.04);
+      border: 1px solid rgba(204,0,0,0.12);
+      border-radius: 12px;
+      padding: 18px 22px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 20px;
+    }
+
+    .terms-intro strong { color: var(--red); }
+
+    .terms-list {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .terms-item {
+      border-bottom: 1px solid rgba(201,168,76,0.12);
+      padding: 14px 20px;
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.7;
+      display: flex;
+      gap: 12px;
+    }
+
+    .terms-item:last-child { border-bottom: none; }
+
+    .terms-num {
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+      min-width: 20px;
+    }
+
+    .terms-item span { color: var(--red); font-weight: 600; }
+
+    /* ── Contact ── */
+    .contact-layout {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+    }
+
+    .contact-img-col {
+      flex-shrink: 0;
+      width: 280px;
+    }
+
+    .contact-img-col img {
+      width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    }
+
+    .contact-info-col { flex: 1; }
+
+    .contact-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 14px;
+    }
+
+    .contact-card-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+
+    .phone-chips {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .phone-chip-lg {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .phone-chip-lg:hover {
+      border-color: var(--red);
+      color: var(--red);
+      background: rgba(204,0,0,0.04);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--red);
+      color: rgba(255,255,255,0.8);
+      text-align: center;
+      padding: 24px 20px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+    }
+
+    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    /* ── Popup ── */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30,10,10,0.55);
+      backdrop-filter: blur(6px);
+      z-index: 999;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    .popup-box {
+      background: var(--card);
+      border-radius: 20px;
+      max-width: 440px;
+      width: 90%;
+      margin: 60px auto 0;
+      padding: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      animation: popUp 0.3s ease;
+      border-top: 4px solid var(--red);
+    }
+
+    @keyframes popUp {
+      from { transform: translateY(16px); opacity: 0; }
+      to   { transform: translateY(0); opacity: 1; }
+    }
+
+    .popup-box h2 { font-size: 18px; color: var(--red); margin-bottom: 18px; }
+
+    .popup-eg {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 10px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .popup-eg strong { color: var(--red); }
+    .popup-eg .hl { color: var(--red); font-weight: 700; font-size: 15px; }
+
+    .popup-close-btn {
+      width: 100%;
+      margin-top: 16px;
+      padding: 13px;
+      background: linear-gradient(135deg, var(--red), var(--red-dark));
+      color: #fff;
+      font-size: 14px;
+      font-weight: 700;
+      font-family: "Noto Sans SC", sans-serif;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .popup-close-btn:hover { opacity: 0.88; }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .sidebar { display: none; }
+      .mobile-nav { display: block; }
+      .hero { padding: 28px 20px; }
+      .hero-layout { flex-direction: column-reverse; gap: 24px; }
+      .hero-poster { width: 100%; max-width: 320px; margin: 0 auto; }
+      .section { padding: 32px 20px; }
+      .about-layout { flex-direction: column; }
+      .about-banner-col { width: 100%; }
+      .contact-layout { flex-direction: column; }
+      .contact-img-col { width: 100%; }
+    }
+
+    @media (max-width: 560px) {
+      .input-row { flex-direction: column; }
+      .query-btn { width: 100%; }
+      .summary-bar { flex-direction: column; text-align: center; gap: 8px; }
+      .summary-count { font-size: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Confetti ── -->
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<!-- ── Header ── -->
+<header class="site-header">
+  <div class="header-logo">
+    <img src="./images/logo.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<span class=logo-ph>COCO<br>小铺</span>'">
+  </div>
+  <div class="header-info">
+    <div class="header-company">COCO POT ENTERPRISE (M) SDN BHD</div>
+    <div class="header-tagline">Coco 小铺 · 精选生活好物</div>
+  </div>
+  <button class="header-help" onclick="openPopup()">📖 查询说明</button>
+</header>
+
+<!-- ── Mobile Nav ── -->
+<nav class="mobile-nav">
+  <div class="mobile-nav-inner">
+    <a href="#query"   onclick="setMobileActive(this)">🎫 抽奖查询</a>
+    <a href="#prizes"  onclick="setMobileActive(this)">🏆 奖品展示</a>
+    <a href="#terms"   onclick="setMobileActive(this)">📋 活动条款</a>
+    <a href="#about"   onclick="setMobileActive(this)">🏢 关于我们</a>
+    <a href="#contact" onclick="setMobileActive(this)">📞 联络方式</a>
+  </div>
+</nav>
+
+<!-- ── Body ── -->
+<div class="body-wrap">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <!-- Logo area -->
+    <div class="sidebar-logo-area">
+      <div class="sidebar-logo-circle">
+        <img src="./images/logo.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<div class=sidebar-logo-ph>COCO<br>小铺</div>'">
+      </div>
+      <div class="sidebar-brand">Coco 小铺</div>
+      <div class="sidebar-brand-sub">COCO POT ENTERPRISE (M) SDN BHD</div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+      <div class="nav-label">NAVIGATION</div>
+      <a class="nav-item active" href="#query" onclick="setActive(this)">
+        <span class="nav-icon">🎫</span> 抽奖券查询
+      </a>
+      <a class="nav-item" href="#prizes" onclick="setActive(this)">
+        <span class="nav-icon">🏆</span> 奖品展示
+      </a>
+      <a class="nav-item" href="#terms" onclick="setActive(this)">
+        <span class="nav-icon">📋</span> 活动条款
+      </a>
+      <a class="nav-item" href="#about" onclick="setActive(this)">
+        <span class="nav-icon">🏢</span> 关于我们
+      </a>
+      <a class="nav-item" href="#contact" onclick="setActive(this)">
+        <span class="nav-icon">📞</span> 联络方式
+      </a>
+    </nav>
+
+    <!-- Bottom -->
+    <div class="sidebar-bottom">
+      <a class="fb-btn-side" href="https://www.facebook.com/Coco800821" target="_blank" rel="noopener">
+        <svg class="fb-icon" viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+        关注 Facebook 主页
+      </a>
+      <div class="phone-list">
+        <a class="phone-item" href="tel:+60187707002">📱 018-7707002</a>
+        <a class="phone-item" href="tel:+60107603957">📱 010-7603957</a>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#CC0000;background:rgba(204,0,0,0.05);border-radius:6px;padding:8px 10px;line-height:1.6;">
+        ⚠️ 此联络号码仅供<strong>商业合作洽谈</strong>，不提供客服售后服务
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main Content ── -->
+  <main class="main-content">
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-layout">
+        <div class="hero-text">
+          <div class="hero-eyebrow">✨ Lucky Draw 2026</div>
+          <h1 class="hero-title">
+            <span class="hero-title-zh">幸运大抽奖</span>
+            Lucky Draw
+          </h1>
+          <p class="hero-subtitle">
+            在 <strong>Coco 小铺</strong> Facebook 直播消费满 <strong>RM50</strong>，
+            即可获得一次抽奖机会！豪华奖品等你来赢 🎁
+          </p>
+          <div class="hero-tags">
+            <span class="hero-tag red">📅 01/05/2026 — 31/05/2026</span>
+            <span class="hero-tag gold">🛒 满 RM50 = 1 张抽奖券</span>
+            <span class="hero-tag red">🎰 Facebook 直播现场抽奖</span>
+          </div>
+        </div>
+        <div class="hero-poster">
+          <img src="./images/activity.jpg" alt="活动说明">
+          <div class="poster-badge">
+            <span>买满</span>
+            <span class="big">RM50</span>
+            <span>得1券</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Query ── -->
+    <section class="section" id="query">
+      <div class="sec-header">
+        <div class="sec-icon" style="background:rgba(204,0,0,0.12);font-size:26px;width:52px;height:52px;">🎫</div>
+        <div>
+          <div class="sec-title-text" style="color:var(--red);font-size:clamp(20px,3vw,26px);">抽奖券查询</div>
+          <div class="sec-title-sub">输入您的电话号码 + Facebook 名字首字即可查询</div>
+        </div>
+      </div>
+
+      <div class="query-card">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+          <span style="font-size:22px;animation:badgePulse 1.8s ease-in-out infinite;">🎟️</span>
+          <span style="font-size:15px;font-weight:700;color:var(--red);">输入您的信息，立即查看您的幸运抽奖券！</span>
+        </div>
+        <p class="query-hint">
+          请输入 <strong>订单收货人电话号码</strong> + <strong>Facebook 名字首字</strong><br>
+          示例 1：电话 012-3456789，名字 Coco Pot → 输入 <strong>0123456789C</strong><br>
+          示例 2：电话 012-3456789，名字 苏展乐 → 输入 <strong>0123456789苏</strong>
+        </p>
+        <div class="input-row">
+          <input
+            class="query-input"
+            id="queryInput"
+            type="text"
+            placeholder="例：0123456789C 或 0123456789彩"
+            autocomplete="off"
+            spellcheck="false"
+            onkeydown="if(event.key==='Enter') doSearch()"
+          >
+          <button class="query-btn" onclick="doSearch()">查 询</button>
+        </div>
+        <div id="result-area"></div>
+      </div>
+    </section>
+
+    <!-- ── Prizes ── -->
+    <section class="section" id="prizes">
+      <div class="sec-header">
+        <div class="sec-icon">🏆</div>
+        <div>
+          <div class="sec-title-text">丰富奖品</div>
+          <div class="sec-title-sub">iPhone 17、iPad、现金 RM888 及更多豪礼</div>
+        </div>
+      </div>
+
+      <div class="prizes-wrap">
+        <div class="prizes-img-container">
+          <img src="./images/prizes.jpg" alt="抽奖礼品">
+          <div class="prizes-overlay">
+            <div class="prizes-overlay-text">
+              总奖品价值 <strong>5 位数</strong>，好运属于你！
+            </div>
+          </div>
+        </div>
+
+        <!-- Prize list -->
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:24px;">
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">📱</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">iPhone 17</div>
+              <div style="font-size:12px;color:var(--muted);">× 1 台</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">📲</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">iPad（10代）</div>
+              <div style="font-size:12px;color:var(--muted);">× 3 台</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">💵</span>
+            <div>
+              <div style="font-weight:700;color:var(--red);font-size:14px;">现金 RM888</div>
+              <div style="font-size:12px;color:var(--muted);">× 3 份</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">🍳</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">空气炸锅</div>
+              <div style="font-size:12px;color:var(--muted);">× 5 台</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">🍚</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">电饭锅</div>
+              <div style="font-size:12px;color:var(--muted);">× 5 台</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">🫖</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">养生壶</div>
+              <div style="font-size:12px;color:var(--muted);">× 5 台</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">🎧</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">耳机（ANC降噪）</div>
+              <div style="font-size:12px;color:var(--muted);">× 10 台</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">💨</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（橙色）</div>
+              <div style="font-size:12px;color:var(--muted);">× 10 台</div>
+            </div>
+          </div>
+
+          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">💨</span>
+            <div>
+              <div style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（紫色）</div>
+              <div style="font-size:12px;color:var(--muted);">× 10 台</div>
+            </div>
+          </div>
+
+          <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">🛍️</span>
+            <div>
+              <div style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM100</div>
+              <div style="font-size:12px;color:var(--muted);">× 88 份</div>
+            </div>
+          </div>
+
+          <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+            <span style="font-size:28px;">🛍️</span>
+            <div>
+              <div style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM50</div>
+              <div style="font-size:12px;color:var(--muted);">× 88 份</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Terms ── -->
+    <section class="section" id="terms">
+      <div class="sec-header">
+        <div class="sec-icon">📋</div>
+        <div>
+          <div class="sec-title-text">活动条款</div>
+          <div class="sec-title-sub">Terms & Conditions</div>
+        </div>
+      </div>
+
+      <div class="terms-intro">
+        活动期间凡在 <strong>Coco 小铺 Facebook 直播</strong> 消费满 <strong>RM50</strong>，
+        即获得 <strong>1 张</strong>幸运抽奖券（无上限，单笔订单单独计算）。
+        抽奖将于 <strong>Facebook 现场直播</strong> 公开进行，确保公平公正！
+      </div>
+
+      <div class="terms-list">
+        <div class="terms-item"><span class="terms-num">1</span><div>本活动开放予<span>马来西亚及新加坡</span>居民参与，凡在活动期间于指定平台消费达指定金额，即自动获得抽奖资格，无需额外报名。</div></div>
+        <div class="terms-item"><span class="terms-num">2</span><div>活动有效期为 <span>01/05/2026 至 31/05/2026</span>，逾期付款订单将不被受理。</div></div>
+        <div class="terms-item"><span class="terms-num">3</span><div>每笔订单消费满 <span>RM50</span> 即获得 1 张抽奖券，张数无上限，以<span>单笔订单独立计算</span>。<strong style="color:#CC0000">多笔订单不可合并累计</strong>——例如：同一位顾客下了两笔各 RM90 的订单，每笔各得 1 张，合计 2 张；<strong style="color:#CC0000;font-size:15px;background:rgba(204,0,0,0.07);padding:1px 6px;border-radius:4px;">❌ 并非 RM90＋RM90＝RM180 合并计算为 3 张</strong></div></div>
+        <div class="terms-item"><span class="terms-num">4</span><div>抽奖将通过 <span>Facebook 现场直播</span> 方式进行，确保公平公正。</div></div>
+        <div class="terms-item"><span class="terms-num">5</span><div>中奖名单将通过官网、社交媒体或电话公布及通知。</div></div>
+        <div class="terms-item"><span class="terms-num">6</span><div>中奖者需提供有效身份证明及相关资料以领取奖品。</div></div>
+        <div class="terms-item"><span class="terms-num">7</span><div>所有奖品不可兑换现金或转让。</div></div>
+        <div class="terms-item"><span class="terms-num">8</span><div>参与者同意主办方在活动相关范围内使用其个人资料（如姓名、照片）作宣传用途，无需额外补偿。</div></div>
+        <div class="terms-item"><span class="terms-num">9</span><div>最终解释权归主办方 <span>COCO POT ENTERPRISE (M) SDN BHD</span> 所有。</div></div>
+      </div>
+    </section>
+
+    <!-- ── Full-width Banner (above About) ── -->
+    <div class="full-banner">
+      <img src="./images/banner.jpg" alt="Coco 小铺横幅" onerror="this.style.display='none'">
+    </div>
+
+    <!-- ── About ── -->
+    <section class="section" id="about">
+      <div class="sec-header">
+        <div class="sec-icon">🏢</div>
+        <div>
+          <div class="sec-title-text">关于我们</div>
+          <div class="sec-title-sub">About Coco 小铺</div>
+        </div>
+      </div>
+
+      <div class="about-layout">
+        <div class="about-text-col">
+          <p><strong>Coco 小铺</strong> 是一间专注于精选优质生活好物的直播电商平台，坚持「慢慢挑，只留值得的」理念。</p>
+          <p>每周上新，为您分享真实好物，不虚假宣传，只推荐真正值得购买的产品。</p>
+          <p>旗下公司 <strong>COCO POT ENTERPRISE (M) SDN BHD</strong> 在马来西亚正式注册运营，致力于为每一位顾客带来安心、优质的购物体验。</p>
+          <a class="fb-btn-main" href="https://www.facebook.com/Coco800821" target="_blank" rel="noopener">
+            <svg class="fb-icon" viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+            前往 Facebook 主页
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Contact ── -->
+    <section class="section" id="contact">
+      <div class="sec-header">
+        <div class="sec-icon">📞</div>
+        <div>
+          <div class="sec-title-text">联络方式</div>
+          <div class="sec-title-sub">合作洽谈 · 客服咨询</div>
+        </div>
+      </div>
+
+      <div class="contact-layout">
+        <div class="contact-img-col">
+          <img src="./images/contact.jpg" alt="合作联络" onerror="this.style.display='none'">
+        </div>
+        <div class="contact-info-col">
+
+          <!-- 合作热线 -->
+          <div class="contact-card">
+            <div class="contact-card-title">🤝 合作热线</div>
+            <div class="phone-chips">
+              <a class="phone-chip-lg" href="tel:+60187707002">📱 018-7707002</a>
+              <a class="phone-chip-lg" href="tel:+60107603957">📱 010-7603957</a>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:#CC0000;background:rgba(204,0,0,0.05);border-radius:6px;padding:8px 10px;">
+              ⚠️ 此号码仅供<strong>商业合作洽谈</strong>，不提供客服售后服务
+            </div>
+          </div>
+
+          <!-- 商务邮件 -->
+          <div class="contact-card">
+            <div class="contact-card-title">📧 商务邮件</div>
+            <div class="phone-chips">
+              <a class="phone-chip-lg" href="mailto:cocopot.admin@gmail.com" style="font-size:13px;">✉️ cocopot.admin@gmail.com</a>
+            </div>
+            <div style="margin-top:10px;font-size:12px;color:#CC0000;background:rgba(204,0,0,0.05);border-radius:6px;padding:8px 10px;">
+              ⚠️ 此邮件仅供<strong>商业合作洽谈</strong>，不提供客服售后服务
+            </div>
+          </div>
+
+          <!-- 温馨提示 -->
+          <div style="background:rgba(255,193,7,0.08);border:1px solid rgba(255,193,7,0.3);border-left:4px solid #C9A84C;border-radius:10px;padding:16px 18px;">
+            <div style="font-size:13px;font-weight:700;color:#8a6a00;margin-bottom:8px;">📌 温馨提示</div>
+            <div style="font-size:13px;color:#666;line-height:1.8;">
+              以上联络方式<strong style="color:#CC0000;">仅供商业合作洽谈</strong>（如直播带货、品牌合作等）使用。<br>
+              如需<strong>售后服务或订单查询</strong>，请直接前往我们的 Facebook 主页私信联络，客服团队将尽快为您跟进，谢谢您的理解与支持 ❤️
+            </div>
+            <a class="fb-btn-main" style="margin-top:12px;width:100%;justify-content:center;font-size:13px;" href="https://www.facebook.com/Coco800821" target="_blank" rel="noopener">
+              <svg class="fb-icon" viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
+              前往 Facebook 主页私信客服
+            </a>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- ── Footer ── -->
+<footer>
+  <p>© 2026 COCO POT ENTERPRISE (M) SDN BHD · All Rights Reserved</p>
+  <p style="margin-top:6px;">
+    <a href="https://www.facebook.com/Coco800821" target="_blank">Facebook</a> &nbsp;·&nbsp;
+    <a href="tel:+60187707002">018-7707002</a> &nbsp;·&nbsp;
+    <a href="tel:+60107603957">010-7603957</a>
+  </p>
+</footer>
+
+<!-- ── Popup ── -->
+<div id="popup" class="popup-overlay" onclick="if(event.target===this)closePopup()">
+  <div class="popup-box">
+    <h2>🎫 查询说明</h2>
+    <div class="popup-eg">
+      <strong>示例 1</strong><br>
+      电话：012-3456789 &nbsp;·&nbsp; Facebook：Coco Pot<br>
+      请输入：<span class="hl">0123456789C</span>
+    </div>
+    <div class="popup-eg">
+      <strong>示例 2</strong><br>
+      电话：012-3456789 &nbsp;·&nbsp; Facebook：苏展乐<br>
+      请输入：<span class="hl">0123456789苏</span>
+    </div>
+    <button class="popup-close-btn" onclick="closePopup()">我知道了，开始查询 ✨</button>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG ───────────────────────────────────────────────
+  const GAS_URL = "YOUR_GAS_WEB_APP_URL_HERE";
+  // ────────────────────────────────────────────────────────
+
+  // Popup
+  window.onload = () => {
+    document.getElementById("popup").style.display = "block";
+    initConfetti();
+  };
+  function openPopup()  { document.getElementById("popup").style.display = "block"; }
+  function closePopup() { document.getElementById("popup").style.display = "none"; }
+
+  // Nav active state
+  function setActive(el) {
+    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
+    el.classList.add("active");
+  }
+
+  function setMobileActive(el) {
+    document.querySelectorAll(".mobile-nav a").forEach(a => a.classList.remove("active"));
+    el.classList.add("active");
+  }
+
+  // Intersection Observer — auto highlight nav
+  const sections = ["query","prizes","terms","about","contact"];
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        const id = e.target.id;
+        document.querySelectorAll(".nav-item").forEach(n => {
+          n.classList.toggle("active", n.getAttribute("href") === "#" + id);
+        });
+        document.querySelectorAll(".mobile-nav a").forEach(a => {
+          a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+        });
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // Query
+  async function doSearch() {
+    const val  = document.getElementById("queryInput").value.trim();
+    const area = document.getElementById("result-area");
+
+    if (!val) {
+      area.innerHTML = `<div class="no-result"><span class="icon">⚠️</span>请输入电话号码 + FB 名字首字</div>`;
+      return;
+    }
+
+    area.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>查询中，请稍候...</p></div>`;
+
+    try {
+      const res  = await fetch(`${GAS_URL}?q=${encodeURIComponent(val)}`);
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      if (data && data.error) throw new Error(data.error);
+      renderResult(data);
+    } catch (err) {
+      area.innerHTML = `<div class="no-result"><span class="icon">❌</span>查询失败，请稍后再试<br><small style="font-size:11px;opacity:.5">${esc(err.message)}</small></div>`;
+    }
+  }
+
+  function renderResult(data) {
+    const area = document.getElementById("result-area");
+
+    if (!data || data.length === 0) {
+      area.innerHTML = `
+        <div class="no-result">
+          <span class="icon">🔍</span>
+          查不到相关资料<br>
+          <small style="font-size:12px;opacity:.6">请确认输入格式是否正确，或联系客服查询</small>
+        </div>`;
+      return;
+    }
+
+    let html = `<div class="tickets-scroll">`;
+
+    data.forEach((d, i) => {
+      html += `
+        <div class="ticket-card" style="animation-delay:${i * 0.08}s">
+          <div class="ticket-top">
+            <div class="ticket-num-label">LUCKY TICKET NO.</div>
+            <div class="ticket-number">${esc(d.lucky)}</div>
+            <div class="ticket-gold-line"></div>
+          </div>
+          <div class="ticket-body">
+            <div class="ticket-row">
+              <span class="t-key">订单编号</span>
+              <span class="t-val">${esc(d.order)}</span>
+            </div>
+            <div class="ticket-row">
+              <span class="t-key">FB 名字</span>
+              <span class="t-val">${esc(d.name)}</span>
+            </div>
+            <div class="ticket-row">
+              <span class="t-key">消费金额</span>
+              <span class="t-val amount">RM ${esc(d.amount)}</span>
+            </div>
+            <div class="ticket-row">
+              <span class="t-key">张数</span>
+              <span class="t-val count">×${esc(d.count)} 张</span>
+            </div>
+          </div>
+        </div>`;
+    });
+
+    html += `</div>
+      <div class="summary-bar">
+        <div class="summary-count">${data.length}</div>
+        <div class="summary-info">
+          <strong>张幸运抽奖券</strong><br>
+          抽奖将于 Facebook 直播现场进行，请持续关注！🍀<br>
+          <span style="font-size:12px">祝您好运，奖品等着您 🎁</span>
+        </div>
+      </div>`;
+
+    area.innerHTML = html;
+  }
+
+  function esc(s) {
+    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  // ── Confetti ─────────────────────────────────────────────
+  function initConfetti() {
+    const wrap   = document.getElementById("confettiWrap");
+    const colors = ["#CC0000","#FFD700","#F0D080","#FF6B6B","#FFA500","#fff","#C9A84C"];
+    const count  = 28;
+
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement("div");
+      el.className = "confetti-piece";
+      el.style.cssText = `
+        left: ${Math.random() * 100}%;
+        width: ${Math.random() * 6 + 5}px;
+        height: ${Math.random() * 10 + 10}px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        animation-duration: ${Math.random() * 8 + 7}s;
+        animation-delay: ${Math.random() * 8}s;
+        border-radius: ${Math.random() > 0.5 ? "50%" : "2px"};
+        opacity: ${Math.random() * 0.5 + 0.3};
+      `;
+      wrap.appendChild(el);
+    }
+  }
+</script>
+
+</body>
+</html>
