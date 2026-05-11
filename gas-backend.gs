@@ -4,7 +4,7 @@
 // ============================================================
 
 // 修改为你的 Google Sheets ID（网址中 /d/ 后面那一串）
-const SHEET_ID = "YOUR_GOOGLE_SHEET_ID_HERE";
+const SHEET_ID = "1JUPM86pRMM0R2Ok9GV-4W0I7dWyxFBKKF1gNlqFP0aM";
 
 function doGet(e) {
   // 处理 CORS 预检（部分浏览器需要）
