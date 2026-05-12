@@ -712,10 +712,16 @@
     }
 
     .tickets-grid {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 12px;
-      justify-content: center;
+    }
+
+    @media (max-width: 480px) {
+      .tickets-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+      }
     }
 
     .ticket-badge {
@@ -736,12 +742,14 @@
       white-space: nowrap;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 480px) {
       .ticket-badge {
-        font-size: 13px;
-        padding: 10px 14px;
+        font-size: 12px;
+        padding: 10px 8px;
         border-radius: 10px;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
+        text-align: center;
+        justify-self: stretch;
       }
     }
 
@@ -1606,9 +1614,9 @@
 
     let orderRows = Object.values(orders).map(o => `
       <tr>
-        <td style="padding:9px 12px;color:var(--text);font-size:13px;">${esc(o.order)}</td>
-        <td style="padding:9px 12px;font-weight:700;color:var(--red);font-size:13px;">RM ${parseFloat(o.amount||0).toFixed(2)}</td>
-        <td style="padding:9px 12px;text-align:center;">
+        <td style="padding:9px 12px;color:var(--text);font-size:13px;white-space:nowrap;">${esc(o.order)}</td>
+        <td style="padding:9px 12px;font-weight:700;color:var(--red);font-size:13px;white-space:nowrap;">RM ${parseFloat(o.amount||0).toFixed(2)}</td>
+        <td style="padding:9px 12px;text-align:center;white-space:nowrap;">
           <span style="background:rgba(201,168,76,0.15);color:#7a5c00;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;">× ${o.tickets.length} 张</span>
         </td>
       </tr>`).join("");
@@ -1637,8 +1645,8 @@
           ${Object.keys(orders).length > 0 ? `
           <div style="margin-bottom:24px;">
             <div class="tickets-label">📋 订单明细</div>
-            <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(201,168,76,0.25);">
-              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+            <div style="border-radius:10px;overflow-x:auto;border:1px solid rgba(201,168,76,0.25);">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:320px;">
                 <thead>
                   <tr style="background:rgba(201,168,76,0.12);">
                     <th style="padding:9px 12px;text-align:left;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:1px;border-bottom:1px solid rgba(201,168,76,0.25);white-space:nowrap;">订单号</th>
