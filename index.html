@@ -783,6 +783,24 @@
       100% { left: 130%; }
     }
 
+    .range-item {
+      display: inline;
+    }
+    .range-sep {
+      display: inline;
+    }
+
+    @media (max-width: 600px) {
+      .range-item {
+        display: block;
+        text-align: center;
+        line-height: 2;
+      }
+      .range-sep {
+        display: none;
+      }
+    }
+
     @keyframes goldFlow {
       0%   { background-position: 0% 50%; }
       50%  { background-position: 100% 50%; }
@@ -1638,7 +1656,7 @@
 
         <div style="padding:14px 20px 16px;background:linear-gradient(135deg,#7a0000,#4a0000);border-top:2px solid #C9A84C;border-bottom:2px solid #C9A84C;">
           <span class="gold-animated" style="font-size:16px;letter-spacing:2px;display:block;margin-bottom:10px;">📌 号码区间</span>
-          <div style="font-size:17px;font-weight:800;color:#FFE066;line-height:2.2;word-break:break-all;text-shadow:0 0 8px rgba(255,224,102,0.5);">
+          <div style="font-size:17px;font-weight:800;color:#FFE066;line-height:2.2;word-break:break-all;text-shadow:0 0 8px rgba(255,224,102,0.5);text-align:center;">
             ${getTicketRanges(data.map(d=>d.lucky))}
           </div>
         </div>
@@ -1716,7 +1734,7 @@
       });
     });
 
-    return parts.join(" &nbsp;|&nbsp; ");
+    return parts.map(p => `<span class="range-item">${p}</span>`).join('<span class="range-sep"> | </span>');
   }
 
   // ── Confetti ─────────────────────────────────────────────
