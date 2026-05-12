@@ -712,15 +712,18 @@
     }
 
     .tickets-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
       gap: 12px;
+      justify-content: center;
     }
 
     @media (max-width: 480px) {
       .tickets-grid {
+        display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 8px;
+        justify-content: unset;
       }
     }
 
@@ -855,6 +858,38 @@
     }
 
     .prizes-overlay-text strong { color: var(--gold-lt); font-size: 18px; }
+
+    .prize-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .prize-grid > div {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    @media (max-width: 480px) {
+      .prize-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .prize-grid > div {
+        padding: 10px 12px !important;
+        border-radius: 10px !important;
+        gap: 8px;
+        flex-direction: column;
+        align-items: flex-start;
+        text-align: left;
+      }
+      .prize-grid > div span { font-size: 20px !important; }
+      .prize-grid > div .prize-name { font-size: 12px !important; }
+      .prize-grid > div .prize-count { font-size: 11px !important; }
+    }
 
     /* ── Full-width Banner ── */
     .full-banner {
@@ -1280,94 +1315,64 @@
         </div>
 
         <!-- Prize list -->
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-top:24px;">
+        <div class="prize-grid">
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">📱</span>
             <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">iPhone 17</div>
-              <div style="font-size:12px;color:var(--muted);">× 1 台</div>
+              <div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">iPhone 17</div>
+              <div class="prize-count" style="font-size:12px;color:var(--muted);">× 1 台</div>
             </div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">📲</span>
-            <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">iPad（10代）</div>
-              <div style="font-size:12px;color:var(--muted);">× 3 台</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">iPad（10代）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 3 台</div></div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">💵</span>
-            <div>
-              <div style="font-weight:700;color:var(--red);font-size:14px;">现金 RM888</div>
-              <div style="font-size:12px;color:var(--muted);">× 3 份</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--red);font-size:14px;">现金 RM888</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 3 份</div></div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🍳</span>
-            <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">空气炸锅</div>
-              <div style="font-size:12px;color:var(--muted);">× 5 台</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">空气炸锅</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 5 台</div></div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🍚</span>
-            <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">电饭锅</div>
-              <div style="font-size:12px;color:var(--muted);">× 5 台</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">电饭锅</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 5 台</div></div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🫖</span>
-            <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">养生壶</div>
-              <div style="font-size:12px;color:var(--muted);">× 5 台</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">养生壶</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 5 台</div></div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🎧</span>
-            <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">耳机（ANC降噪）</div>
-              <div style="font-size:12px;color:var(--muted);">× 10 台</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">耳机（ANC降噪）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 10 台</div></div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">💨</span>
-            <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（橙色）</div>
-              <div style="font-size:12px;color:var(--muted);">× 10 台</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（橙色）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 10 台</div></div>
           </div>
 
           <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">💨</span>
-            <div>
-              <div style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（紫色）</div>
-              <div style="font-size:12px;color:var(--muted);">× 10 台</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（紫色）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 10 台</div></div>
           </div>
 
           <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🛍️</span>
-            <div>
-              <div style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM100</div>
-              <div style="font-size:12px;color:var(--muted);">× 88 份</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM100</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 88 份</div></div>
           </div>
 
           <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🛍️</span>
-            <div>
-              <div style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM50</div>
-              <div style="font-size:12px;color:var(--muted);">× 88 份</div>
-            </div>
+            <div><div class="prize-name" style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM50</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 88 份</div></div>
           </div>
 
         </div>
