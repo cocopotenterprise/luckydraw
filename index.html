@@ -783,21 +783,39 @@
       100% { left: 130%; }
     }
 
+    .range-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
     .range-item {
-      display: inline;
+      display: inline-block;
+      background: rgba(255,224,102,0.1);
+      border: 1px solid rgba(255,215,0,0.35);
+      border-radius: 8px;
+      padding: 5px 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #FFE066;
+      text-shadow: 0 0 8px rgba(255,224,102,0.5);
+      white-space: nowrap;
     }
-    .range-sep {
-      display: inline;
-    }
+    .range-sep { display: none; }
 
     @media (max-width: 600px) {
+      .range-wrap {
+        display: block;
+      }
       .range-item {
         display: block;
         text-align: center;
-        line-height: 2;
-      }
-      .range-sep {
-        display: none;
+        background: none;
+        border: none;
+        border-radius: 0;
+        padding: 0;
+        font-size: 17px;
+        line-height: 2.2;
       }
     }
 
@@ -1656,13 +1674,15 @@
 
         <div style="padding:14px 20px 16px;background:linear-gradient(135deg,#7a0000,#4a0000);border-top:2px solid #C9A84C;border-bottom:2px solid #C9A84C;">
           <span class="gold-animated" style="font-size:16px;letter-spacing:2px;display:block;margin-bottom:10px;">📌 号码区间</span>
-          <div style="font-size:17px;font-weight:800;color:#FFE066;line-height:2.2;word-break:break-all;text-shadow:0 0 8px rgba(255,224,102,0.5);text-align:center;">
+          <div class="range-wrap">
             ${getTicketRanges(data.map(d=>d.lucky))}
           </div>
         </div>
 
         <div class="result-card-body">
-          ${Object.keys(orders).length > 0 ? `
+          ${Object.keys(orders).length > 0 ? (() => {
+            const totalAmt = Object.values(orders).reduce((sum, o) => sum + parseFloat(o.amount || 0), 0);
+            return `
           <div style="margin-bottom:24px;">
             <div class="tickets-label">📋 订单明细</div>
             <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(201,168,76,0.25);">
@@ -1670,8 +1690,13 @@
                 <span style="flex:1;">订单号</span><span>消费金额</span><span style="min-width:52px;text-align:right;">抽奖券数</span>
               </div>
               ${orderRows}
+              <div style="padding:10px 14px;background:rgba(201,168,76,0.08);border-top:2px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:space-between;">
+                <span style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;">消费总金额</span>
+                <span style="font-size:18px;font-weight:900;color:var(--red);">RM ${totalAmt.toFixed(2)}</span>
+              </div>
             </div>
-          </div>` : ""}
+          </div>`;
+          })() : ""}
 
           <div class="tickets-label">🎫 抽奖券号码（共 ${totalTickets} 张）</div>
           <div class="tickets-grid">${ticketBadges}</div>
