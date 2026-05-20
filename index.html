@@ -492,12 +492,18 @@
       overflow: hidden;
       box-shadow: 0 12px 40px rgba(0,0,0,0.15);
       background: #000;
+      perspective: 900px;
+      aspect-ratio: 3 / 4;
     }
     .stories-img {
       width: 100%;
-      height: auto;
+      height: 100%;
       display: block;
-      transition: opacity 0.3s ease;
+      object-fit: cover;
+      object-position: center top;
+      transform-style: preserve-3d;
+      backface-visibility: hidden;
+      will-change: transform;
     }
     .stories-bars {
       position: absolute;
@@ -1392,7 +1398,7 @@
 <!-- ── Mobile Nav ── -->
 <nav class="mobile-nav">
   <div class="mobile-nav-inner">
-    <a href="#activity" onclick="setMobileActive(this)">📺 直播活动</a>
+    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});setMobileActive(this);return false;">📺 直播活动</a>
     <a href="#query"   onclick="setMobileActive(this)">🎫 抽奖查询</a>
     <a href="#prizes"  onclick="setMobileActive(this)">🏆 奖品展示</a>
     <a href="#terms"   onclick="setMobileActive(this)">📋 活动条款</a>
@@ -1418,7 +1424,7 @@
     <!-- Navigation -->
     <nav class="sidebar-nav">
       <div class="nav-label">🧭 NAVIGATION 导航</div>
-      <a class="nav-item" href="#activity" onclick="setActive(this)">
+      <a class="nav-item" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});setActive(this);return false;">
         <span class="nav-icon">📺</span> 直播活动
       </a>
       <a class="nav-item active" href="#query" onclick="setActive(this)">
@@ -1571,11 +1577,22 @@
       </div>
 
       <div class="query-card">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
           <span style="font-size:22px;animation:badgePulse 1.8s ease-in-out infinite;">🎟️</span>
-          <span style="font-size:15px;font-weight:700;color:var(--red);">输入您的信息，立即查看您的幸运抽奖券！</span>
+          <span style="font-size:15px;font-weight:700;color:var(--red);flex:1;">输入您的信息，立即查看您的幸运抽奖券！</span>
+          <button onclick="openInfoPopup()" style="flex-shrink:0;font-size:12px;font-weight:700;padding:6px 13px;border-radius:20px;border:1.5px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.1);color:#7a5a00;cursor:pointer;transition:all 0.2s;white-space:nowrap;">📖 查询说明</button>
         </div>
-        <p class="query-hint">
+        <div id="queryGuide" style="max-height:200px;opacity:1;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;background:rgba(201,168,76,0.07);border-radius:10px;border:1px solid rgba(201,168,76,0.25);padding:0 16px;margin-bottom:12px;">
+          <div style="padding:14px 0;">
+            <p style="font-size:13px;color:#555;line-height:1.9;margin:0;">
+              请输入 <strong>订单收货人电话号码</strong> + <strong>Facebook 名字首字</strong><br>
+              📌 示例 1：电话 012-3456789，名字 Coco Pot → 输入 <strong>0123456789C</strong><br>
+              📌 示例 2：电话 012-3456789，名字 苏展乐 → 输入 <strong>0123456789苏</strong><br>
+              💡 号码支持 +60 / 60 / 0 开头，系统自动识别
+            </p>
+          </div>
+        </div>
+        <p class="query-hint" style="display:none;">
           请输入 <strong>订单收货人电话号码</strong> + <strong>Facebook 名字首字</strong><br>
           示例 1：电话 012-3456789，名字 Coco Pot → 输入 <strong>0123456789C</strong><br>
           示例 2：电话 012-3456789，名字 苏展乐 → 输入 <strong>0123456789苏</strong>
@@ -1807,6 +1824,25 @@
   </p>
 </footer>
 
+<!-- ── Info Popup（查询卡片内触发，不跳转）── -->
+<div id="infoPopup" class="popup-overlay" onclick="if(event.target===this)closeInfoPopup()" style="display:none;">
+  <div class="popup-box">
+    <h2>📖 查询说明</h2>
+    <div class="popup-eg">
+      <strong>示例 1</strong><br>
+      电话：012-3456789 &nbsp;·&nbsp; Facebook：Coco Pot<br>
+      请输入：<span class="hl">0123456789C</span>
+    </div>
+    <div class="popup-eg">
+      <strong>示例 2</strong><br>
+      电话：012-3456789 &nbsp;·&nbsp; Facebook：苏展乐<br>
+      请输入：<span class="hl">0123456789苏</span>
+    </div>
+    <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px;">💡 号码支持 +60 / 60 / 0 开头，系统自动识别</p>
+    <button class="popup-close-btn" onclick="closeInfoPopup()">我知道了 ✨</button>
+  </div>
+</div>
+
 <!-- ── Popup ── -->
 <div id="popup" class="popup-overlay" onclick="if(event.target===this)closePopup()">
   <div class="popup-box">
@@ -1821,7 +1857,7 @@
       电话：012-3456789 &nbsp;·&nbsp; Facebook：苏展乐<br>
       请输入：<span class="hl">0123456789苏</span>
     </div>
-    <button class="popup-close-btn" onclick="closePopup();document.getElementById('query').scrollIntoView({behavior:'smooth'});setTimeout(()=>document.getElementById('queryInput').focus(),500);">我知道了，开始查询 ✨</button>
+    <button class="popup-close-btn" onclick="closePopup();document.getElementById('query').scrollIntoView({behavior:'smooth'});">我知道了，开始查询 ✨</button>
   </div>
 </div>
 
@@ -1836,8 +1872,10 @@
     initConfetti();
     storiesInit();
   };
-  function openPopup()  { document.getElementById("popup").style.display = "block"; }
-  function closePopup() { document.getElementById("popup").style.display = "none"; }
+  function openPopup()     { document.getElementById("popup").style.display = "block"; }
+  function closePopup()    { document.getElementById("popup").style.display = "none"; }
+  function openInfoPopup() { document.getElementById("infoPopup").style.display = "block"; }
+  function closeInfoPopup(){ document.getElementById("infoPopup").style.display = "none"; }
 
   // Nav active state
   function setActive(el) {
@@ -2038,6 +2076,9 @@
   let sPaused = false, sElapsed = 0, sPauseStart = 0;
   let sPtrX = 0, sPtrY = 0;
 
+  // 预加载所有图片，避免快速切换时空白/重复
+  const sPreloaded = STORIES.map(src => { const img = new Image(); img.src = src; return img; });
+
   function storiesInit() {
     const bars = document.getElementById("storiesBars");
     bars.innerHTML = STORIES.map((_, i) =>
@@ -2083,26 +2124,9 @@
     sTimer = setTimeout(() => storiesGo(sIdx + 1), remaining);
   }
 
-  let sFadeTimer = null;
+  let sFlipping = false;
 
-  function storiesGo(i) {
-    clearTimeout(sTimer);
-    clearTimeout(sFadeTimer);
-    sPaused = false;
-    sElapsed = 0;
-    sIdx = (i + STORIES.length) % STORIES.length;
-
-    // 立即切换图片，取消任何未完成的淡入动作
-    const img = document.getElementById("storiesImg");
-    img.style.transition = "none";
-    img.style.opacity = "0";
-    img.src = STORIES[sIdx];
-    sFadeTimer = setTimeout(() => {
-      img.style.transition = "opacity 0.2s ease";
-      img.style.opacity = "1";
-    }, 30);
-
-    // 更新进度条状态
+  function updateBars() {
     STORIES.forEach((_, j) => {
       const bar = document.getElementById("sbar" + j);
       if (!bar) return;
@@ -2112,13 +2136,56 @@
         bar.classList.add("done");
       } else if (j === sIdx) {
         bar.querySelector(".stories-bar-fill").style.setProperty("--dur", STORY_DUR / 1000 + "s");
-        void bar.querySelector(".stories-bar-fill").offsetWidth; // reflow
+        void bar.querySelector(".stories-bar-fill").offsetWidth;
         bar.querySelector(".stories-bar-fill").style.animation = "";
         bar.classList.add("active");
       }
     });
+  }
 
-    sTimer = setTimeout(() => storiesGo(sIdx + 1), STORY_DUR);
+  function storiesGo(i) {
+    const next = (i + STORIES.length) % STORIES.length;
+    clearTimeout(sTimer);
+    sPaused = false;
+    sElapsed = 0;
+
+    if (next === sIdx) {
+      updateBars();
+      sTimer = setTimeout(() => storiesGo(sIdx + 1), STORY_DUR);
+      return;
+    }
+
+    if (sFlipping) return;
+    sFlipping = true;
+
+    // 方向：向前翻左(-1)，向后翻右(+1)
+    // 判断是否是"向前"：next 比 sIdx 大，或者从尾跳头
+    const goingForward = (next > sIdx) ? !(next === STORIES.length - 1 && sIdx === 0) : (sIdx === STORIES.length - 1 && next === 0);
+    const dir = goingForward ? -1 : 1;
+
+    const img = document.getElementById("storiesImg");
+
+    // Phase 1：当前图转走（侧面消失）
+    img.style.transition = "transform 0.22s ease-in";
+    img.style.transform = `rotateY(${dir * 90}deg)`;
+
+    setTimeout(() => {
+      // 换图（此时图片侧边，用户看不见）
+      img.style.transition = "none";
+      img.style.transform = `rotateY(${-dir * 90}deg)`;
+      img.src = STORIES[next];
+      sIdx = next;
+
+      // Phase 2：新图从侧面转回正面
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        img.style.transition = "transform 0.22s ease-out";
+        img.style.transform = "rotateY(0deg)";
+        setTimeout(() => { sFlipping = false; }, 220);
+      }));
+
+      updateBars();
+      sTimer = setTimeout(() => storiesGo(sIdx + 1), STORY_DUR);
+    }, 220);
   }
 
   function storiesNext() { storiesGo(sIdx + 1); }
