@@ -1355,6 +1355,13 @@
       .about-banner-col { width: 100%; }
       .contact-layout { flex-direction: column; }
       .contact-img-col { width: 100%; }
+      /* Header mobile shrink */
+      .site-header { height: 62px; padding: 0 14px; gap: 10px; }
+      .header-logo { width: 42px; height: 42px; border-radius: 8px; }
+      .header-company { font-size: 13px; }
+      .header-tagline { font-size: 10px; }
+      .header-help { font-size: 12px; padding: 7px 13px; }
+      .mobile-nav { top: 62px; }
     }
 
     @media (max-width: 560px) {
@@ -1385,7 +1392,7 @@
 <!-- ── Mobile Nav ── -->
 <nav class="mobile-nav">
   <div class="mobile-nav-inner">
-    <a href="#schedule" onclick="setMobileActive(this)">📺 直播活动</a>
+    <a href="#activity" onclick="setMobileActive(this)">📺 直播活动</a>
     <a href="#query"   onclick="setMobileActive(this)">🎫 抽奖查询</a>
     <a href="#prizes"  onclick="setMobileActive(this)">🏆 奖品展示</a>
     <a href="#terms"   onclick="setMobileActive(this)">📋 活动条款</a>
@@ -1411,7 +1418,7 @@
     <!-- Navigation -->
     <nav class="sidebar-nav">
       <div class="nav-label">🧭 NAVIGATION 导航</div>
-      <a class="nav-item" href="#schedule" onclick="setActive(this)">
+      <a class="nav-item" href="#activity" onclick="setActive(this)">
         <span class="nav-icon">📺</span> 直播活动
       </a>
       <a class="nav-item active" href="#query" onclick="setActive(this)">
@@ -1469,7 +1476,7 @@
             <span class="hero-tag red">🎰 Facebook 直播现场抽奖</span>
           </div>
         </div>
-        <div class="hero-poster">
+        <div class="hero-poster" id="activity">
           <div class="stories-wrap" id="storiesWrap">
             <div class="stories-bars" id="storiesBars"></div>
             <img class="stories-img" id="storiesImg" src="./images/activity.jpg" alt="活动照片">
@@ -2076,16 +2083,24 @@
     sTimer = setTimeout(() => storiesGo(sIdx + 1), remaining);
   }
 
+  let sFadeTimer = null;
+
   function storiesGo(i) {
     clearTimeout(sTimer);
+    clearTimeout(sFadeTimer);
     sPaused = false;
     sElapsed = 0;
     sIdx = (i + STORIES.length) % STORIES.length;
 
-    // 切换图片（淡出淡入）
+    // 立即切换图片，取消任何未完成的淡入动作
     const img = document.getElementById("storiesImg");
+    img.style.transition = "none";
     img.style.opacity = "0";
-    setTimeout(() => { img.src = STORIES[sIdx]; img.style.opacity = "1"; }, 150);
+    img.src = STORIES[sIdx];
+    sFadeTimer = setTimeout(() => {
+      img.style.transition = "opacity 0.2s ease";
+      img.style.opacity = "1";
+    }, 30);
 
     // 更新进度条状态
     STORIES.forEach((_, j) => {
