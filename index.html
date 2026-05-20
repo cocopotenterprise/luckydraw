@@ -459,6 +459,60 @@
       display: block;
     }
 
+    /* ── Stories 轮播 ── */
+    .stories-wrap {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+      background: #000;
+    }
+    .stories-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: opacity 0.3s ease;
+    }
+    .stories-bars {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      display: flex;
+      gap: 4px;
+      z-index: 10;
+    }
+    .stories-bar {
+      flex: 1;
+      height: 3px;
+      background: rgba(255,255,255,0.4);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .stories-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: #fff;
+      border-radius: 2px;
+    }
+    .stories-bar.done .stories-bar-fill { width: 100%; }
+    .stories-bar.active .stories-bar-fill {
+      animation: storiesFill var(--dur, 4s) linear forwards;
+    }
+    @keyframes storiesFill {
+      from { width: 0%; }
+      to   { width: 100%; }
+    }
+    .stories-prev, .stories-next {
+      position: absolute;
+      top: 0; bottom: 0;
+      width: 38%;
+      cursor: pointer;
+      z-index: 9;
+    }
+    .stories-prev { left: 0; }
+    .stories-next { right: 0; }
+
     .poster-badge {
       position: absolute;
       top: -10px;
@@ -1283,7 +1337,12 @@
           </div>
         </div>
         <div class="hero-poster">
-          <img src="./images/activity.jpg" alt="活动说明">
+          <div class="stories-wrap" id="storiesWrap">
+            <div class="stories-bars" id="storiesBars"></div>
+            <img class="stories-img" id="storiesImg" src="./images/activity.jpg" alt="活动照片">
+            <div class="stories-prev" onclick="storiesPrev()"></div>
+            <div class="stories-next" onclick="storiesNext()"></div>
+          </div>
           <div class="poster-badge">
             <span>买满</span>
             <span class="big">RM50</span>
@@ -1567,6 +1626,7 @@
   window.onload = () => {
     document.getElementById("popup").style.display = "block";
     initConfetti();
+    storiesInit();
   };
   function openPopup()  { document.getElementById("popup").style.display = "block"; }
   function closePopup() { document.getElementById("popup").style.display = "none"; }
@@ -1763,6 +1823,98 @@
   }
 
   // ── Confetti ─────────────────────────────────────────────
+  // ── Stories 轮播 ─────────────────────────────────────────
+  const STORIES  = [1,2,3,4,5,6].map(n => n === 1 ? "./images/activity.jpg" : `./images/activity${n}.jpg`);
+  const STORY_DUR = 4000;
+  let sIdx = 0, sTimer = null, sTouchX = 0, sTouchY = 0;
+  let sPaused = false, sElapsed = 0, sPauseStart = 0;
+
+  function storiesInit() {
+    const bars = document.getElementById("storiesBars");
+    bars.innerHTML = STORIES.map((_, i) =>
+      `<div class="stories-bar" id="sbar${i}"><div class="stories-bar-fill"></div></div>`
+    ).join("");
+    storiesGo(0);
+
+    const wrap = document.getElementById("storiesWrap");
+
+    // 长按暂停（鼠标）
+    wrap.addEventListener("mousedown",  storiesPause);
+    wrap.addEventListener("mouseup",    storiesResume);
+    wrap.addEventListener("mouseleave", storiesResume);
+
+    // 长按暂停（触摸）+ 滑动切换
+    wrap.addEventListener("touchstart", e => {
+      sTouchX = e.touches[0].clientX;
+      sTouchY = e.touches[0].clientY;
+      storiesPause();
+    }, { passive: true });
+
+    wrap.addEventListener("touchend", e => {
+      storiesResume();
+      const dx = e.changedTouches[0].clientX - sTouchX;
+      const dy = e.changedTouches[0].clientY - sTouchY;
+      // 水平滑动幅度明显大于垂直才切换
+      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        dx < 0 ? storiesNext() : storiesPrev();
+      }
+    }, { passive: true });
+  }
+
+  function storiesPause() {
+    if (sPaused) return;
+    sPaused = true;
+    sPauseStart = Date.now();
+    clearTimeout(sTimer);
+    // 暂停进度条动画
+    const fill = document.querySelector("#sbar" + sIdx + " .stories-bar-fill");
+    if (fill) fill.style.animationPlayState = "paused";
+  }
+
+  function storiesResume() {
+    if (!sPaused) return;
+    sPaused = false;
+    sElapsed += Date.now() - sPauseStart;
+    const remaining = Math.max(0, STORY_DUR - sElapsed);
+    // 恢复进度条动画
+    const fill = document.querySelector("#sbar" + sIdx + " .stories-bar-fill");
+    if (fill) fill.style.animationPlayState = "running";
+    sTimer = setTimeout(() => storiesGo(sIdx + 1), remaining);
+  }
+
+  function storiesGo(i) {
+    clearTimeout(sTimer);
+    sPaused = false;
+    sElapsed = 0;
+    sIdx = (i + STORIES.length) % STORIES.length;
+
+    // 切换图片（淡出淡入）
+    const img = document.getElementById("storiesImg");
+    img.style.opacity = "0";
+    setTimeout(() => { img.src = STORIES[sIdx]; img.style.opacity = "1"; }, 150);
+
+    // 更新进度条状态
+    STORIES.forEach((_, j) => {
+      const bar = document.getElementById("sbar" + j);
+      if (!bar) return;
+      bar.classList.remove("done", "active");
+      bar.querySelector(".stories-bar-fill").style.animation = "none";
+      if (j < sIdx) {
+        bar.classList.add("done");
+      } else if (j === sIdx) {
+        bar.querySelector(".stories-bar-fill").style.setProperty("--dur", STORY_DUR / 1000 + "s");
+        void bar.querySelector(".stories-bar-fill").offsetWidth; // reflow
+        bar.querySelector(".stories-bar-fill").style.animation = "";
+        bar.classList.add("active");
+      }
+    });
+
+    sTimer = setTimeout(() => storiesGo(sIdx + 1), STORY_DUR);
+  }
+
+  function storiesNext() { storiesGo(sIdx + 1); }
+  function storiesPrev() { storiesGo(sIdx - 1); }
+
   function initConfetti() {
     const wrap   = document.getElementById("confettiWrap");
     const colors = ["#CC0000","#FFD700","#F0D080","#FF6B6B","#FFA500","#fff","#C9A84C"];
