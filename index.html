@@ -61,19 +61,20 @@
       position: sticky;
       top: 0;
       z-index: 200;
-      height: 62px;
-      background: var(--red);
+      height: 78px;
+      background: linear-gradient(135deg, #a00000 0%, #cc0000 60%, #e00000 100%);
       display: flex;
       align-items: center;
-      padding: 0 20px;
-      gap: 14px;
-      box-shadow: 0 2px 16px rgba(204,0,0,0.25);
+      padding: 0 28px;
+      gap: 18px;
+      box-shadow: 0 4px 24px rgba(150,0,0,0.45);
+      border-bottom: 2px solid rgba(201,168,76,0.4);
     }
 
     .header-logo {
-      width: 44px;
-      height: 44px;
-      border-radius: 8px;
+      width: 54px;
+      height: 54px;
+      border-radius: 10px;
       object-fit: cover;
       border: 2px solid rgba(255,255,255,0.3);
       flex-shrink: 0;
@@ -97,39 +98,46 @@
     .header-info { flex: 1; }
 
     .header-company {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 16px;
+      font-weight: 900;
       color: #fff;
-      letter-spacing: 0.3px;
+      letter-spacing: 0.5px;
       line-height: 1.3;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
     }
 
     .header-tagline {
-      font-size: 10px;
-      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      color: rgba(255,255,255,0.8);
       letter-spacing: 0.5px;
+      margin-top: 2px;
     }
 
     .header-help {
-      font-size: 13px;
-      padding: 7px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,0.4);
-      background: rgba(255,255,255,0.12);
+      font-size: 14px;
+      font-weight: 700;
+      padding: 10px 22px;
+      border-radius: 24px;
+      border: 2px solid rgba(255,255,255,0.6);
+      background: rgba(255,255,255,0.18);
       color: #fff;
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background 0.2s, transform 0.15s;
       white-space: nowrap;
       flex-shrink: 0;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
 
-    .header-help:hover { background: rgba(255,255,255,0.22); }
+    .header-help:hover {
+      background: rgba(255,255,255,0.30);
+      transform: translateY(-1px);
+    }
 
     /* ── Mobile tab nav ── */
     .mobile-nav {
       display: none;
       position: sticky;
-      top: 62px;
+      top: 78px;
       z-index: 190;
       background: var(--sidebar);
       border-bottom: 1px solid var(--border);
@@ -169,7 +177,7 @@
     /* ── Body layout ── */
     .body-wrap {
       display: flex;
-      min-height: calc(100vh - 62px);
+      min-height: calc(100vh - 78px);
       position: relative;
       z-index: 1;
     }
@@ -181,8 +189,8 @@
       background: var(--sidebar);
       border-right: 1px solid var(--border);
       position: sticky;
-      top: 62px;
-      height: calc(100vh - 62px);
+      top: 78px;
+      height: calc(100vh - 78px);
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -261,29 +269,47 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 11px 14px;
-      border-radius: 10px;
+      padding: 11px 16px;
+      border-radius: 24px;
       font-size: 14px;
       color: var(--text);
       text-decoration: none;
-      transition: all 0.2s;
+      transition: background 0.18s, color 0.18s, transform 0.12s, box-shadow 0.18s;
       cursor: pointer;
-      margin-bottom: 2px;
-      border: 1px solid transparent;
+      margin-bottom: 4px;
+      border: 1.5px solid transparent;
+      position: relative;
+      overflow: hidden;
     }
 
-    .nav-item .nav-icon { font-size: 17px; flex-shrink: 0; }
+    .nav-item .nav-icon {
+      font-size: 18px;
+      flex-shrink: 0;
+      transition: transform 0.18s;
+    }
 
     .nav-item:hover {
-      background: rgba(204,0,0,0.06);
+      background: rgba(204,0,0,0.08);
       color: var(--red);
+      border-color: rgba(204,0,0,0.18);
+      box-shadow: 0 3px 14px rgba(204,0,0,0.12);
+      transform: translateY(-1px);
+    }
+
+    .nav-item:hover .nav-icon { transform: scale(1.18); }
+
+    .nav-item:active {
+      transform: scale(0.95) translateY(0);
+      box-shadow: 0 1px 4px rgba(204,0,0,0.1);
+      background: rgba(204,0,0,0.14);
     }
 
     .nav-item.active {
-      background: rgba(204,0,0,0.08);
+      background: linear-gradient(135deg, rgba(204,0,0,0.12), rgba(204,0,0,0.06));
       color: var(--red);
-      border-color: rgba(204,0,0,0.15);
-      font-weight: 600;
+      border-color: rgba(204,0,0,0.25);
+      font-weight: 700;
+      box-shadow: 0 2px 10px rgba(204,0,0,0.12);
     }
 
     /* Sidebar bottom */
@@ -513,33 +539,136 @@
     .stories-prev { left: 0; }
     .stories-next { right: 0; }
 
-    .poster-badge {
-      position: absolute;
-      bottom: 12px;
-      right: 12px;
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold-lt), var(--gold));
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 10px;
-      font-weight: 700;
-      color: #5a3c00;
-      text-align: center;
-      line-height: 1.3;
-      box-shadow: 0 4px 14px rgba(201,168,76,0.4);
-      animation: badgePulse 2s ease-in-out infinite;
-    }
-
     @keyframes badgePulse {
       0%, 100% { transform: scale(1); }
       50%       { transform: scale(1.06); }
     }
 
-    .poster-badge .big { font-size: 15px; }
+    /* ── Stories Marquee ── */
+    .stories-marquee {
+      overflow: hidden;
+      background: linear-gradient(90deg, var(--red-dark), var(--red), #e60000, var(--red-dark));
+      border-radius: 0 0 16px 16px;
+      padding: 8px 0;
+      margin-top: -4px;
+    }
+    .stories-marquee-track {
+      display: inline-block;
+      white-space: nowrap;
+      animation: marqueeScroll 18s linear infinite;
+      font-size: 13px;
+      font-weight: 700;
+      color: #FFD700;
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    }
+    @keyframes marqueeScroll {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ── Schedule Section ── */
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .schedule-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 18px 22px;
+      border: 1px solid var(--border);
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      transition: box-shadow 0.2s;
+    }
+    .schedule-card:hover { box-shadow: 0 4px 20px rgba(204,0,0,0.1); }
+    .schedule-date {
+      text-align: center;
+      flex-shrink: 0;
+      min-width: 60px;
+    }
+    .schedule-date .day {
+      font-size: 28px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+    }
+    .schedule-date .month {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+    .schedule-divider {
+      width: 1px;
+      height: 48px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+    .schedule-info { flex: 1; }
+    .schedule-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+    }
+    .schedule-desc {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .schedule-status {
+      flex-shrink: 0;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 20px;
+    }
+    .status-upcoming {
+      background: rgba(201,168,76,0.12);
+      color: #7a5a00;
+      border: 1px solid rgba(201,168,76,0.3);
+    }
+    .status-live {
+      background: rgba(204,0,0,0.1);
+      color: var(--red);
+      border: 1px solid rgba(204,0,0,0.25);
+      animation: badgePulse 1.5s ease-in-out infinite;
+    }
+    .status-done {
+      background: rgba(0,0,0,0.05);
+      color: var(--muted);
+      border: 1px solid rgba(0,0,0,0.1);
+    }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .highlight-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 22px 18px;
+      border: 1px solid var(--border);
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .highlight-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(201,168,76,0.15);
+    }
+    .highlight-icon { font-size: 34px; margin-bottom: 10px; }
+    .highlight-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+    .highlight-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
     /* ── Section styles ── */
     .section {
@@ -1256,6 +1385,7 @@
 <!-- ── Mobile Nav ── -->
 <nav class="mobile-nav">
   <div class="mobile-nav-inner">
+    <a href="#schedule" onclick="setMobileActive(this)">📺 直播活动</a>
     <a href="#query"   onclick="setMobileActive(this)">🎫 抽奖查询</a>
     <a href="#prizes"  onclick="setMobileActive(this)">🏆 奖品展示</a>
     <a href="#terms"   onclick="setMobileActive(this)">📋 活动条款</a>
@@ -1280,7 +1410,10 @@
 
     <!-- Navigation -->
     <nav class="sidebar-nav">
-      <div class="nav-label">NAVIGATION</div>
+      <div class="nav-label">🧭 NAVIGATION 导航</div>
+      <a class="nav-item" href="#schedule" onclick="setActive(this)">
+        <span class="nav-icon">📺</span> 直播活动
+      </a>
       <a class="nav-item active" href="#query" onclick="setActive(this)">
         <span class="nav-icon">🎫</span> 抽奖券查询
       </a>
@@ -1343,14 +1476,82 @@
             <div class="stories-prev" onclick="storiesPrev()"></div>
             <div class="stories-next" onclick="storiesNext()"></div>
           </div>
-          <div class="poster-badge">
-            <span>买满</span>
-            <span class="big">RM50</span>
-            <span>得1券</span>
+          <div class="stories-marquee">
+            <span class="stories-marquee-track">
+              🛒 买满 RM50 得 1 张幸运抽奖券 &nbsp;✨&nbsp;
+              🎫 消费越多，抽奖券越多！&nbsp;🏆&nbsp;
+              豪华大奖等你来赢！&nbsp;🎉&nbsp;
+              📅 活动期间 01/05 — 31/05/2026 &nbsp;🔥&nbsp;
+              🛒 买满 RM50 得 1 张幸运抽奖券 &nbsp;✨&nbsp;
+              🎫 消费越多，抽奖券越多！&nbsp;🏆&nbsp;
+              豪华大奖等你来赢！&nbsp;🎉&nbsp;
+              📅 活动期间 01/05 — 31/05/2026 &nbsp;🔥&nbsp;
+            </span>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- ── Schedule ── -->
+    <section class="section" id="schedule">
+      <div class="sec-header">
+        <div class="sec-icon">📺</div>
+        <div>
+          <div class="sec-title-text">直播活动</div>
+          <div class="sec-title-sub">Live Stream Schedule &amp; Highlights</div>
+        </div>
+      </div>
+
+      <div class="schedule-list">
+        <div class="schedule-card">
+          <div class="schedule-date">
+            <div class="day" style="font-size:18px;">待定</div>
+            <div class="month">TBD</div>
+          </div>
+          <div class="schedule-divider"></div>
+          <div class="schedule-info">
+            <div class="schedule-title">🎉 幸运大抽奖 — 直播现场抽奖</div>
+            <div class="schedule-desc">Facebook 直播公开抽奖，豪华大奖即将揭晓！抽奖日期敬请期待。</div>
+          </div>
+          <div class="schedule-status status-upcoming">📅 日期待定</div>
+        </div>
+        <div class="schedule-card">
+          <div class="schedule-date">
+            <div class="day">01–31</div>
+            <div class="month">May 2026</div>
+          </div>
+          <div class="schedule-divider"></div>
+          <div class="schedule-info">
+            <div class="schedule-title">🛒 活动期间 — 每单满 RM50 得抽奖券</div>
+            <div class="schedule-desc">在 Coco 小铺 Facebook 直播消费，满 RM50 自动获得 1 张幸运抽奖券</div>
+          </div>
+          <div class="schedule-status status-live">🔴 进行中</div>
+        </div>
+      </div>
+
+      <div class="highlights-grid">
+        <div class="highlight-card">
+          <div class="highlight-icon">🎁</div>
+          <div class="highlight-title">豪华奖品</div>
+          <div class="highlight-desc">总价值 5 位数，精心挑选的高品质奖品</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">📱</div>
+          <div class="highlight-title">全程直播</div>
+          <div class="highlight-desc">Facebook 公开直播抽奖，公平公正公开</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">🛒</div>
+          <div class="highlight-title">消费即得</div>
+          <div class="highlight-desc">满 RM50 自动获得抽奖券，消费越多机会越多</div>
+        </div>
+        <div class="highlight-card">
+          <div class="highlight-icon">🏆</div>
+          <div class="highlight-title">现场公布</div>
+          <div class="highlight-desc">抽奖结果实时公布，获奖者当场联络确认</div>
+        </div>
+      </div>
+    </section>
 
     <!-- ── Query ── -->
     <section class="section" id="query">
@@ -1643,7 +1844,7 @@
   }
 
   // Intersection Observer — auto highlight nav
-  const sections = ["query","prizes","terms","about","contact"];
+  const sections = ["schedule","query","prizes","terms","about","contact"];
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (e.isIntersecting) {
