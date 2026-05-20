@@ -515,8 +515,8 @@
 
     .poster-badge {
       position: absolute;
-      top: -10px;
-      right: -10px;
+      bottom: 12px;
+      right: 12px;
       width: 72px;
       height: 72px;
       border-radius: 50%;
@@ -1826,8 +1826,9 @@
   // ── Stories 轮播 ─────────────────────────────────────────
   const STORIES  = [1,2,3,4,5,6].map(n => n === 1 ? "./images/activity.jpg" : `./images/activity${n}.jpg`);
   const STORY_DUR = 4000;
-  let sIdx = 0, sTimer = null, sTouchX = 0, sTouchY = 0;
+  let sIdx = 0, sTimer = null;
   let sPaused = false, sElapsed = 0, sPauseStart = 0;
+  let sPtrX = 0, sPtrY = 0;
 
   function storiesInit() {
     const bars = document.getElementById("storiesBars");
@@ -1838,27 +1839,21 @@
 
     const wrap = document.getElementById("storiesWrap");
 
-    // 长按暂停（鼠标）
-    wrap.addEventListener("mousedown",  storiesPause);
-    wrap.addEventListener("mouseup",    storiesResume);
-    wrap.addEventListener("mouseleave", storiesResume);
-
-    // 长按暂停（触摸）+ 滑动切换
-    wrap.addEventListener("touchstart", e => {
-      sTouchX = e.touches[0].clientX;
-      sTouchY = e.touches[0].clientY;
+    // 用 Pointer Events 统一处理鼠标和触摸，避免手机上触发两次的问题
+    wrap.addEventListener("pointerdown", e => {
+      sPtrX = e.clientX; sPtrY = e.clientY;
       storiesPause();
-    }, { passive: true });
-
-    wrap.addEventListener("touchend", e => {
+    });
+    wrap.addEventListener("pointerup", e => {
       storiesResume();
-      const dx = e.changedTouches[0].clientX - sTouchX;
-      const dy = e.changedTouches[0].clientY - sTouchY;
-      // 水平滑动幅度明显大于垂直才切换
+      const dx = e.clientX - sPtrX;
+      const dy = e.clientY - sPtrY;
       if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
         dx < 0 ? storiesNext() : storiesPrev();
       }
-    }, { passive: true });
+    });
+    wrap.addEventListener("pointerleave",  storiesResume);
+    wrap.addEventListener("pointercancel", storiesResume);
   }
 
   function storiesPause() {
@@ -1866,7 +1861,6 @@
     sPaused = true;
     sPauseStart = Date.now();
     clearTimeout(sTimer);
-    // 暂停进度条动画
     const fill = document.querySelector("#sbar" + sIdx + " .stories-bar-fill");
     if (fill) fill.style.animationPlayState = "paused";
   }
@@ -1876,7 +1870,6 @@
     sPaused = false;
     sElapsed += Date.now() - sPauseStart;
     const remaining = Math.max(0, STORY_DUR - sElapsed);
-    // 恢复进度条动画
     const fill = document.querySelector("#sbar" + sIdx + " .stories-bar-fill");
     if (fill) fill.style.animationPlayState = "running";
     sTimer = setTimeout(() => storiesGo(sIdx + 1), remaining);
