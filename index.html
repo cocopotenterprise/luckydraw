@@ -647,10 +647,10 @@
       min-width: 60px;
     }
     .schedule-date .day {
-      font-size: 28px;
+      font-size: 20px;
       font-weight: 900;
       color: var(--red);
-      line-height: 1;
+      line-height: 1.2;
     }
     .schedule-date .month {
       font-size: 12px;
@@ -1526,7 +1526,7 @@
             即可获得一次抽奖机会！豪华奖品等你来赢 🎁
           </p>
           <div class="hero-tags">
-            <span class="hero-tag red">📅 01/05/2026 — 31/05/2026</span>
+            <span class="hero-tag red">📅 01/05/2026 — 06/06/2026</span>
             <span class="hero-tag gold">🛒 满 RM50 = 1 张抽奖券</span>
             <span class="hero-tag red">🎰 Facebook 直播现场抽奖</span>
           </div>
@@ -1546,11 +1546,11 @@
               🛒 买满 RM50 得 1 张幸运抽奖券 &nbsp;✨&nbsp;
               🎫 消费越多，抽奖券越多！&nbsp;🏆&nbsp;
               豪华大奖等你来赢！&nbsp;🎉&nbsp;
-              📅 活动期间 01/05 — 31/05/2026 &nbsp;🔥&nbsp;
+              📅 活动期间 01/05 — 06/06/2026 &nbsp;🔥&nbsp;
               🛒 买满 RM50 得 1 张幸运抽奖券 &nbsp;✨&nbsp;
               🎫 消费越多，抽奖券越多！&nbsp;🏆&nbsp;
               豪华大奖等你来赢！&nbsp;🎉&nbsp;
-              📅 活动期间 01/05 — 31/05/2026 &nbsp;🔥&nbsp;
+              📅 活动期间 01/05 — 06/06/2026 &nbsp;🔥&nbsp;
             </span>
           </div>
         </div>
@@ -1582,8 +1582,9 @@
         </div>
         <div class="schedule-card">
           <div class="schedule-date">
-            <div class="day">01–31</div>
-            <div class="month">May 2026</div>
+            <div class="day">01 May</div>
+            <div class="day">06 June</div>
+            <div class="month">2026</div>
           </div>
           <div class="schedule-divider"></div>
           <div class="schedule-info">
@@ -1768,7 +1769,7 @@
 
       <div class="terms-list">
         <div class="terms-item"><span class="terms-num">1</span><div>本活动开放予<span>马来西亚及新加坡</span>居民参与，凡在活动期间于指定平台消费达指定金额，即自动获得抽奖资格，无需额外报名。</div></div>
-        <div class="terms-item"><span class="terms-num">2</span><div>活动有效期为 <span>01/05/2026 至 31/05/2026</span>，逾期付款订单将不被受理。</div></div>
+        <div class="terms-item"><span class="terms-num">2</span><div>活动有效期为 <span>01/05/2026 至 06/06/2026</span>，逾期付款订单将不被受理。</div></div>
         <div class="terms-item"><span class="terms-num">3</span><div>每笔订单消费满 <span>RM50</span> 即获得 1 张抽奖券，张数无上限，以<span>单笔订单独立计算</span>。<strong style="color:#CC0000">多笔订单不可合并累计</strong>——例如：同一位顾客下了两笔各 RM90 的订单，每笔各得 1 张，合计 2 张；<strong style="color:#CC0000;font-size:15px;background:rgba(204,0,0,0.07);padding:1px 6px;border-radius:4px;">❌ 并非 RM90＋RM90＝RM180 合并计算为 3 张</strong></div></div>
         <div class="terms-item"><span class="terms-num">4</span><div>抽奖将通过 <span>Facebook 现场直播</span> 方式进行，确保公平公正。</div></div>
         <div class="terms-item"><span class="terms-num">5</span><div>中奖名单将通过官网、社交媒体或电话公布及通知。</div></div>
@@ -1839,7 +1840,7 @@
           <div class="contact-card">
             <div class="contact-card-title">📧 商务邮件</div>
             <div class="phone-chips">
-              <a class="phone-chip-lg" href="mailto:cocopot.admin@gmail.com" style="font-size:13px;">✉️ purchase@cocopotenterprise.com</a>
+              <a class="phone-chip-lg" href="mailto:cocopot.admin@gmail.com" style="font-size:13px;">✉️ cocopot.admin@gmail.com</a>
             </div>
             <div style="margin-top:10px;font-size:12px;color:#CC0000;background:rgba(204,0,0,0.05);border-radius:6px;padding:8px 10px;">
               ⚠️ 此邮件仅供<strong>商业合作洽谈</strong>，不提供客服售后服务
@@ -2122,7 +2123,7 @@
 
   // ── Confetti ─────────────────────────────────────────────
   // ── Stories 轮播 ─────────────────────────────────────────
-  const STORIES  = [1,2,3,4,5,6].map(n => n === 1 ? "./images/activity.jpg" : `./images/activity${n}.jpg`);
+  const STORIES  = [1,2,3,4,5,6,7,8,9].map(n => n === 1 ? "./images/activity.jpg" : `./images/activity${n}.jpg`);
   const STORY_DUR = 4000;
   let sIdx = 0, sTimer = null;
   let sPaused = false, sElapsed = 0, sPauseStart = 0;
