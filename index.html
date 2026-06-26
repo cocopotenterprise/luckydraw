@@ -492,7 +492,6 @@
       overflow: hidden;
       box-shadow: 0 12px 40px rgba(0,0,0,0.15);
       background: #111;
-      perspective: 900px;
       aspect-ratio: 3 / 4;
     }
 
@@ -519,9 +518,6 @@
       display: block;
       object-fit: contain;
       object-position: center center;
-      transform-style: preserve-3d;
-      backface-visibility: hidden;
-      will-change: transform;
     }
     .stories-bars {
       position: absolute;
@@ -1570,15 +1566,15 @@
       <div class="schedule-list">
         <div class="schedule-card">
           <div class="schedule-date">
-            <div class="day" style="font-size:18px;">待定</div>
-            <div class="month">TBD</div>
+            <div class="day" style="font-size:22px;">05</div>
+            <div class="month">Jul 2026</div>
           </div>
           <div class="schedule-divider"></div>
           <div class="schedule-info">
             <div class="schedule-title">🎉 幸运大抽奖 — 直播现场抽奖</div>
             <div class="schedule-desc">Facebook 直播公开抽奖，豪华大奖即将揭晓！抽奖日期敬请期待。</div>
           </div>
-          <div class="schedule-status status-upcoming">📅 日期待定</div>
+          <div class="schedule-status status-upcoming">📅 05/07/2026</div>
         </div>
         <div class="schedule-card">
           <div class="schedule-date">
@@ -1625,7 +1621,7 @@
         <div class="sec-icon" style="background:rgba(204,0,0,0.12);font-size:26px;width:52px;height:52px;">🎫</div>
         <div>
           <div class="sec-title-text" style="color:var(--red);font-size:clamp(20px,3vw,26px);">抽奖券查询</div>
-          <div class="sec-title-sub">输入您的电话号码 + Facebook 名字首字即可查询</div>
+          <div class="sec-title-sub">输入您的订单收货人电话号码 + 收件人名字首字即可查询</div>
         </div>
       </div>
 
@@ -1638,9 +1634,9 @@
         <div id="queryGuide" style="max-height:200px;opacity:1;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;background:rgba(201,168,76,0.07);border-radius:10px;border:1px solid rgba(201,168,76,0.25);padding:0 16px;margin-bottom:12px;">
           <div style="padding:14px 0;">
             <p style="font-size:13px;color:#555;line-height:1.9;margin:0;">
-              请输入 <strong>订单收货人电话号码</strong> + <strong>Facebook 名字首字</strong><br>
-              📌 示例 1：电话 012-3456789，名字 Coco Pot → 输入 <strong>0123456789C</strong><br>
-              📌 示例 2：电话 012-3456789，名字 苏展乐 → 输入 <strong>0123456789苏</strong><br>
+              请输入 <strong>订单收货人电话号码</strong> + <strong>订单收件人名字首字</strong><br>
+              📌 示例 1：电话 012-3456789，收件人 Coco Pot → 输入 <strong>0123456789C</strong><br>
+              📌 示例 2：电话 012-3456789，收件人 苏展乐 → 输入 <strong>0123456789苏</strong><br>
               💡 号码支持 +60 / 60 / 0 开头，系统自动识别
             </p>
           </div>
@@ -1655,7 +1651,7 @@
             class="query-input"
             id="queryInput"
             type="text"
-            placeholder="例：0123456789C 或 0123456789苏"
+            placeholder="例：收货人电话 + 名字首字，如 0123456789C"
             autocomplete="off"
             spellcheck="false"
             onkeydown="if(event.key==='Enter') doSearch()"
@@ -1883,12 +1879,12 @@
     <h2>📖 查询说明</h2>
     <div class="popup-eg">
       <strong>示例 1</strong><br>
-      电话：012-3456789 &nbsp;·&nbsp; Facebook：Coco Pot<br>
+      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：Coco Pot<br>
       请输入：<span class="hl">0123456789C</span>
     </div>
     <div class="popup-eg">
       <strong>示例 2</strong><br>
-      电话：012-3456789 &nbsp;·&nbsp; Facebook：苏展乐<br>
+      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：苏展乐<br>
       请输入：<span class="hl">0123456789苏</span>
     </div>
     <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px;">💡 号码支持 +60 / 60 / 0 开头，系统自动识别</p>
@@ -1902,12 +1898,12 @@
     <h2>🎫 查询说明</h2>
     <div class="popup-eg">
       <strong>示例 1</strong><br>
-      电话：012-3456789 &nbsp;·&nbsp; Facebook：Coco Pot<br>
+      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：Coco Pot<br>
       请输入：<span class="hl">0123456789C</span>
     </div>
     <div class="popup-eg">
       <strong>示例 2</strong><br>
-      电话：012-3456789 &nbsp;·&nbsp; Facebook：苏展乐<br>
+      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：苏展乐<br>
       请输入：<span class="hl">0123456789苏</span>
     </div>
     <button class="popup-close-btn" onclick="closePopup();document.getElementById('query').scrollIntoView({behavior:'smooth'});">我知道了，开始查询 ✨</button>
