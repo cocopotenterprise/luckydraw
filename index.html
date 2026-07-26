@@ -3,22 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coco 小铺 · 幸运大抽奖</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <title>Coco 小铺 · 幸运大抽奖 — 活动圆满结束</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700;900&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
   <style>
     :root {
       --red:     #CC0000;
-      --red-dark:#A00000;
+      --red-dk:  #A00000;
       --gold:    #C9A84C;
-      --gold-lt: #F0D080;
+      --gold-lt: #F0D870;
       --bg:      #FDF8F0;
-      --sidebar: #FAF2E4;
-      --white:   #FFFFFF;
       --card:    #FFFFFF;
       --text:    #2D2D2D;
-      --muted:   #888;
-      --border:  rgba(201,168,76,0.25);
-      --sidebar-w: 240px;
+      --muted:   #8A7A6A;
+      --border:  rgba(201,168,76,0.22);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg:   #1A1410;
+        --card: #231E18;
+        --text: #EDE8DF;
+        --muted:#9A8E80;
+        --border: rgba(201,168,76,0.18);
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg:   #1A1410;
+      --card: #231E18;
+      --text: #EDE8DF;
+      --muted:#9A8E80;
+      --border: rgba(201,168,76,0.18);
+    }
+    :root[data-theme="light"] {
+      --bg:      #FDF8F0;
+      --card:    #FFFFFF;
+      --text:    #2D2D2D;
+      --muted:   #8A7A6A;
+      --border:  rgba(201,168,76,0.22);
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,2310 +50,381 @@
       background: var(--bg);
       color: var(--text);
       min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      position: relative;
       overflow-x: hidden;
     }
 
-    /* ── Confetti ── */
-    .confetti-wrap {
+    /* ── Floating confetti pieces ── */
+    .confetti {
       position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none;
-      z-index: 0;
-      overflow: hidden;
-    }
-
-    .confetti-piece {
-      position: absolute;
-      top: -20px;
-      width: 8px;
-      height: 16px;
-      border-radius: 2px;
-      opacity: 0;
-      animation: confettiFall linear infinite;
-    }
-
-    @keyframes confettiFall {
-      0%   { opacity: 0.8; transform: translateY(0) rotate(0deg); }
-      100% { opacity: 0;   transform: translateY(110vh) rotate(720deg); }
-    }
-
-    /* ── HEADER ── */
-    .site-header {
-      position: sticky;
-      top: 0;
-      z-index: 200;
-      height: 78px;
-      background: linear-gradient(135deg, #a00000 0%, #cc0000 60%, #e00000 100%);
-      display: flex;
-      align-items: center;
-      padding: 0 28px;
-      gap: 18px;
-      box-shadow: 0 4px 24px rgba(150,0,0,0.45);
-      border-bottom: 2px solid rgba(201,168,76,0.4);
-    }
-
-    .header-logo {
-      width: 54px;
-      height: 54px;
-      border-radius: 10px;
-      object-fit: cover;
-      border: 2px solid rgba(255,255,255,0.3);
-      flex-shrink: 0;
-      background: rgba(255,255,255,0.15);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      overflow: hidden;
-    }
-
-    .header-logo img { width: 100%; height: 100%; object-fit: cover; }
-
-    .logo-ph {
-      font-size: 9px;
-      color: rgba(255,255,255,0.9);
-      text-align: center;
-      line-height: 1.3;
-      font-weight: 700;
-    }
-
-    .header-info { flex: 1; }
-
-    .header-company {
-      font-size: 16px;
-      font-weight: 900;
-      color: #fff;
-      letter-spacing: 0.5px;
-      line-height: 1.3;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-    }
-
-    .header-tagline {
-      font-size: 12px;
-      color: rgba(255,255,255,0.8);
-      letter-spacing: 0.5px;
-      margin-top: 2px;
-    }
-
-    .header-help {
-      font-size: 14px;
-      font-weight: 700;
-      padding: 10px 22px;
-      border-radius: 24px;
-      border: 2px solid rgba(255,255,255,0.6);
-      background: rgba(255,255,255,0.18);
-      color: #fff;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.15s;
-      white-space: nowrap;
-      flex-shrink: 0;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
-    }
-
-    .header-help:hover {
-      background: rgba(255,255,255,0.30);
-      transform: translateY(-1px);
-    }
-
-    /* ── Mobile tab nav ── */
-    .mobile-nav {
-      display: none;
-      position: sticky;
-      top: 78px;
-      z-index: 190;
-      background: var(--sidebar);
-      border-bottom: 1px solid var(--border);
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-    }
-
-    .mobile-nav::-webkit-scrollbar { display: none; }
-
-    .mobile-nav-inner {
-      display: flex;
-      gap: 0;
-      white-space: nowrap;
-      padding: 0 4px;
-    }
-
-    .mobile-nav a {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: var(--muted);
-      text-decoration: none;
-      border-bottom: 2px solid transparent;
-      transition: color 0.2s, border-color 0.2s;
-      flex-shrink: 0;
-    }
-
-    .mobile-nav a.active,
-    .mobile-nav a:hover {
-      color: var(--red);
-      border-bottom-color: var(--red);
-    }
-
-    /* ── Body layout ── */
-    .body-wrap {
-      display: flex;
-      min-height: calc(100vh - 78px);
-      position: relative;
-      z-index: 1;
-    }
-
-    /* ── SIDEBAR ── */
-    .sidebar {
-      width: var(--sidebar-w);
-      flex-shrink: 0;
-      background: var(--sidebar);
-      border-right: 1px solid var(--border);
-      position: sticky;
-      top: 78px;
-      height: calc(100vh - 78px);
-      overflow-y: auto;
-      display: flex;
-      flex-direction: column;
-      scrollbar-width: thin;
-    }
-
-    .sidebar::-webkit-scrollbar { width: 4px; }
-    .sidebar::-webkit-scrollbar-track { background: transparent; }
-    .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-
-    .sidebar-logo-area {
-      padding: 28px 20px 20px;
-      text-align: center;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-logo-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid var(--gold);
-      overflow: hidden;
-      margin: 0 auto 12px;
-      background: #fff;
-      box-shadow: 0 4px 16px rgba(201,168,76,0.2);
-    }
-
-    .sidebar-logo-circle img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .sidebar-logo-ph {
-      width: 100%;
-      height: 100%;
-      background: var(--red);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 900;
-      color: #fff;
-      line-height: 1.3;
-    }
-
-    .sidebar-brand {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.4;
-    }
-
-    .sidebar-brand-sub {
-      font-size: 11px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* Nav links */
-    .sidebar-nav {
-      padding: 16px 12px;
-      flex: 1;
-    }
-
-    .nav-label {
-      font-size: 10px;
-      letter-spacing: 2px;
-      color: var(--muted);
-      padding: 0 8px;
-      margin-bottom: 6px;
-      margin-top: 8px;
-    }
-
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 11px 16px;
-      border-radius: 24px;
-      font-size: 14px;
-      color: var(--text);
-      text-decoration: none;
-      transition: background 0.18s, color 0.18s, transform 0.12s, box-shadow 0.18s;
-      cursor: pointer;
-      margin-bottom: 4px;
-      border: 1.5px solid transparent;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .nav-item .nav-icon {
-      font-size: 18px;
-      flex-shrink: 0;
-      transition: transform 0.18s;
-    }
-
-    .nav-item:hover {
-      background: rgba(204,0,0,0.08);
-      color: var(--red);
-      border-color: rgba(204,0,0,0.18);
-      box-shadow: 0 3px 14px rgba(204,0,0,0.12);
-      transform: translateY(-1px);
-    }
-
-    .nav-item:hover .nav-icon { transform: scale(1.18); }
-
-    .nav-item:active {
-      transform: scale(0.95) translateY(0);
-      box-shadow: 0 1px 4px rgba(204,0,0,0.1);
-      background: rgba(204,0,0,0.14);
-    }
-
-    .nav-item.active {
-      background: linear-gradient(135deg, rgba(204,0,0,0.12), rgba(204,0,0,0.06));
-      color: var(--red);
-      border-color: rgba(204,0,0,0.25);
-      font-weight: 700;
-      box-shadow: 0 2px 10px rgba(204,0,0,0.12);
-    }
-
-    /* Sidebar bottom */
-    .sidebar-bottom {
-      padding: 16px 16px 20px;
-      border-top: 1px solid var(--border);
-    }
-
-    .fb-btn-side {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 10px;
-      background: #1877F2;
-      color: #fff;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      transition: opacity 0.2s;
-    }
-
-    .fb-btn-side:hover { opacity: 0.88; }
-    .fb-icon { width: 18px; height: 18px; fill: white; flex-shrink: 0; }
-
-    .phone-list { display: flex; flex-direction: column; gap: 6px; }
-
-    .phone-item {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 10px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: #fff;
-      color: var(--text);
-      font-size: 13px;
-      font-weight: 600;
-      text-decoration: none;
-      transition: border-color 0.2s;
-    }
-
-    .phone-item:hover { border-color: var(--gold); color: var(--red); }
-
-    /* ── MAIN CONTENT ── */
-    .main-content {
-      flex: 1;
-      min-width: 0;
-    }
-
-    /* ── Hero ── */
-    .hero {
-      padding: 48px 40px 36px;
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #fff9f0 0%, #fdf8f0 100%);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: -60px; right: -60px;
-      width: 320px; height: 320px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(204,0,0,0.06) 0%, transparent 70%);
-    }
-
-    .hero-layout {
-      display: flex;
-      gap: 40px;
-      align-items: center;
-    }
-
-    .hero-text { flex: 1; }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 12px;
-      letter-spacing: 2px;
-      color: var(--gold);
-      font-weight: 600;
-      margin-bottom: 14px;
-      text-transform: uppercase;
-    }
-
-    .hero-title {
-      font-family: "Playfair Display", serif;
-      font-size: clamp(32px, 4vw, 52px);
-      font-weight: 700;
-      line-height: 1.15;
-      color: var(--red);
-      position: relative;
-      display: inline-block;
-    }
-
-    .hero-title::after {
-      content: '';
-      position: absolute;
-      top: 0; left: -8%; right: -8%;
-      bottom: 0;
-      background: linear-gradient(90deg,
-        transparent 0%,
-        rgba(255,255,255,0.7) 40%,
-        rgba(255,215,100,0.5) 50%,
-        rgba(255,255,255,0.7) 60%,
-        transparent 100%);
-      background-size: 300% 100%;
-      animation: titleShimmer 3s ease-in-out infinite;
-      pointer-events: none;
-    }
-
-    @keyframes titleShimmer {
-      0%   { background-position: 200% center; }
-      100% { background-position: -100% center; }
-    }
-
-    .hero-title-zh {
-      display: block;
-      font-size: clamp(38px, 5vw, 60px);
-    }
-
-    .hero-subtitle {
-      margin-top: 16px;
-      font-size: 15px;
-      color: var(--muted);
-      line-height: 1.8;
-    }
-
-    .hero-subtitle strong { color: var(--red); }
-
-    .hero-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 20px;
-    }
-
-    .hero-tag {
-      padding: 6px 14px;
-      border-radius: 20px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .hero-tag.red {
-      background: rgba(204,0,0,0.08);
-      color: var(--red);
-      border: 1px solid rgba(204,0,0,0.2);
-    }
-
-    .hero-tag.gold {
-      background: rgba(201,168,76,0.1);
-      color: #8a6a00;
-      border: 1px solid rgba(201,168,76,0.3);
-    }
-
-    /* Hero poster */
-    .hero-poster {
-      flex-shrink: 0;
-      width: 260px;
-      position: relative;
-    }
-
-    .hero-poster img {
-      width: 100%;
-      border-radius: 16px;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-      display: block;
-    }
-
-    /* ── Stories 轮播 ── */
-    .stories-wrap {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 12px 40px rgba(0,0,0,0.15);
-      background: #111;
-      aspect-ratio: 3 / 4;
-    }
-
-    .stories-bg {
-      position: absolute;
-      top: -10%; left: -10%;
-      width: 120%; height: 120%;
-      object-fit: cover;
-      filter: blur(18px) brightness(0.55) saturate(1.2);
-      transform: scale(1.05);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .stories-bg-next {
-      opacity: 0;
-      z-index: 1;
-    }
-    .stories-img {
-      position: relative;
-      z-index: 2;
-      width: 100%;
-      height: 100%;
-      display: block;
-      object-fit: contain;
-      object-position: center center;
-    }
-    .stories-bars {
-      position: absolute;
-      top: 10px;
-      left: 10px;
-      right: 10px;
-      display: flex;
-      gap: 4px;
-      z-index: 10;
-    }
-    .stories-bar {
-      flex: 1;
-      height: 3px;
-      background: rgba(255,255,255,0.4);
-      border-radius: 2px;
-      overflow: hidden;
-    }
-    .stories-bar-fill {
-      height: 100%;
-      width: 0%;
-      background: #fff;
-      border-radius: 2px;
-    }
-    .stories-bar.done .stories-bar-fill { width: 100%; }
-    .stories-bar.active .stories-bar-fill {
-      animation: storiesFill var(--dur, 4s) linear forwards;
-    }
-    @keyframes storiesFill {
-      from { width: 0%; }
-      to   { width: 100%; }
-    }
-    .stories-prev, .stories-next {
-      position: absolute;
-      top: 0; bottom: 0;
-      width: 38%;
-      cursor: pointer;
-      z-index: 9;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-    .stories-prev { left: 0; }
-    .stories-next { right: 0; }
-
-    .stories-img-next {
-      position: absolute;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      object-fit: contain;
-      object-position: center center;
-      opacity: 0;
       pointer-events: none;
-      z-index: 5;
-    }
-
-    .stories-fx-btn {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 20;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 12px;
-      border-radius: 20px;
-      background: rgba(0,0,0,0.55);
-      color: #fff;
-      border: 1px solid rgba(255,255,255,0.35);
-      cursor: pointer;
-      white-space: nowrap;
-      backdrop-filter: blur(4px);
-    }
-
-    @keyframes badgePulse {
-      0%, 100% { transform: scale(1); }
-      50%       { transform: scale(1.06); }
-    }
-
-    /* ── Stories Marquee ── */
-    .stories-marquee {
+      z-index: 0;
       overflow: hidden;
-      background: linear-gradient(90deg, var(--red-dark), var(--red), #e60000, var(--red-dark));
-      border-radius: 12px;
-      padding: 8px 0;
-      margin-top: 10px;
     }
-    .stories-marquee-track {
-      display: inline-block;
-      white-space: nowrap;
-      animation: marqueeScroll 18s linear infinite;
-      font-size: 13px;
-      font-weight: 700;
-      color: #FFD700;
-      letter-spacing: 0.5px;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+    .c {
+      position: absolute;
+      width: 7px; height: 14px;
+      border-radius: 2px;
+      opacity: 0;
+      animation: fall linear infinite;
     }
-    @keyframes marqueeScroll {
-      0%   { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+    @keyframes fall {
+      0%   { opacity: .7; transform: translateY(-20px) rotate(0deg); }
+      100% { opacity: 0;  transform: translateY(110vh) rotate(600deg); }
     }
 
-    /* ── Schedule Section ── */
-    .schedule-list {
+    /* ── Main card ── */
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--card);
+      border-radius: 28px;
+      border: 1.5px solid var(--border);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.09), 0 4px 16px rgba(0,0,0,0.05);
+      padding: 56px 52px 48px;
+      max-width: 560px;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* ── Seal / stamp ── */
+    .seal {
+      width: 148px;
+      height: 148px;
+      margin: 0 auto 36px;
+      position: relative;
+    }
+
+    .seal-ring {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      border: 3.5px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      animation: sealPulse 3s ease-in-out infinite;
+    }
+    @keyframes sealPulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(201,168,76,0.3), inset 0 0 0 0 rgba(201,168,76,0.05); }
+      50%      { box-shadow: 0 0 0 10px rgba(201,168,76,0), inset 0 0 24px rgba(201,168,76,0.08); }
+    }
+
+    .seal-inner {
+      width: 116px;
+      height: 116px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--red-dk) 0%, var(--red) 60%, #E83030 100%);
       display: flex;
       flex-direction: column;
-      gap: 14px;
-      margin-bottom: 32px;
-    }
-    .schedule-card {
-      display: flex;
       align-items: center;
-      gap: 20px;
-      background: #fff;
-      border-radius: 14px;
-      padding: 18px 22px;
-      border: 1px solid var(--border);
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-      transition: box-shadow 0.2s;
+      justify-content: center;
+      gap: 2px;
     }
-    .schedule-card:hover { box-shadow: 0 4px 20px rgba(204,0,0,0.1); }
-    .schedule-date {
-      text-align: center;
-      flex-shrink: 0;
-      min-width: 60px;
-    }
-    .schedule-date .day {
-      font-size: 20px;
+
+    .seal-zh {
+      font-size: 26px;
       font-weight: 900;
+      color: #fff;
+      letter-spacing: 2px;
+      line-height: 1;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+    .seal-en {
+      font-size: 9px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    /* Decorative dots around seal */
+    .seal-dots {
+      position: absolute;
+      top: 50%; left: 50%;
+      width: 100%; height: 100%;
+      transform: translate(-50%,-50%);
+      animation: rotateDots 20s linear infinite;
+    }
+    @keyframes rotateDots { to { transform: translate(-50%,-50%) rotate(360deg); } }
+    .seal-dot {
+      position: absolute;
+      width: 5px; height: 5px;
+      background: var(--gold);
+      border-radius: 50%;
+      top: 50%; left: 50%;
+    }
+
+    /* ── Typography ── */
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .headline {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(28px, 5vw, 38px);
+      font-weight: 700;
       color: var(--red);
       line-height: 1.2;
-    }
-    .schedule-date .month {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 600;
-      text-transform: uppercase;
-    }
-    .schedule-divider {
-      width: 1px;
-      height: 48px;
-      background: var(--border);
-      flex-shrink: 0;
-    }
-    .schedule-info { flex: 1; }
-    .schedule-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .schedule-desc {
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .schedule-status {
-      flex-shrink: 0;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: 20px;
-    }
-    .status-upcoming {
-      background: rgba(201,168,76,0.12);
-      color: #7a5a00;
-      border: 1px solid rgba(201,168,76,0.3);
-    }
-    .status-live {
-      background: rgba(204,0,0,0.1);
-      color: var(--red);
-      border: 1px solid rgba(204,0,0,0.25);
-      animation: badgePulse 1.5s ease-in-out infinite;
-    }
-    .status-done {
-      background: rgba(0,0,0,0.05);
-      color: var(--muted);
-      border: 1px solid rgba(0,0,0,0.1);
-    }
-    .highlights-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 16px;
-    }
-    .highlight-card {
-      background: #fff;
-      border-radius: 14px;
-      padding: 22px 18px;
-      border: 1px solid var(--border);
-      text-align: center;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.04);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .highlight-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 24px rgba(201,168,76,0.15);
-    }
-    .highlight-icon { font-size: 34px; margin-bottom: 10px; }
-    .highlight-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
+      text-wrap: balance;
       margin-bottom: 6px;
     }
-    .highlight-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
 
-    /* ── Section styles ── */
-    .section {
-      padding: 48px 40px;
-      border-bottom: 1px solid rgba(201,168,76,0.12);
-    }
-
-    .section:last-child { border-bottom: none; }
-
-    .sec-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 28px;
-    }
-
-    .sec-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: rgba(204,0,0,0.08);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-
-    .sec-title-text {
-      font-size: clamp(18px, 3vw, 24px);
-      font-weight: 700;
-      color: var(--text);
-    }
-
-    .sec-title-sub {
-      font-size: 13px;
-      color: var(--muted);
-      margin-top: 2px;
-    }
-
-    /* ── Query ── */
-    #query {
-      background: linear-gradient(135deg, rgba(204,0,0,0.04) 0%, rgba(201,168,76,0.06) 100%);
-    }
-
-    .query-card {
-      background: var(--card);
-      border-radius: 16px;
-      border: 1.5px solid rgba(204,0,0,0.2);
-      padding: 32px;
-      box-shadow: 0 6px 32px rgba(204,0,0,0.08), 0 2px 8px rgba(0,0,0,0.06);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .query-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-      background: linear-gradient(90deg, var(--red), var(--gold), var(--red));
-      background-size: 200% 100%;
-      animation: borderFlow 3s linear infinite;
-    }
-
-    @keyframes borderFlow {
-      0%   { background-position: 0% center; }
-      100% { background-position: 200% center; }
-    }
-
-    .query-btn {
-      animation: btnPulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes btnPulse {
-      0%, 100% { box-shadow: 0 4px 14px rgba(204,0,0,0.2); }
-      50%       { box-shadow: 0 6px 22px rgba(204,0,0,0.38); }
-    }
-
-    .query-btn:hover {
-      animation: none;
-    }
-
-    .query-hint {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 18px;
-      line-height: 1.7;
-    }
-
-    .query-hint strong { color: var(--red); }
-
-    .input-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .query-input {
-      flex: 1;
-      min-width: 200px;
-      padding: 13px 18px;
-      font-size: 15px;
-      font-family: "Noto Sans SC", sans-serif;
-      background: var(--bg);
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    .query-input::placeholder { color: #bbb; }
-
-    .query-input:focus {
-      border-color: var(--red);
-      box-shadow: 0 0 0 3px rgba(204,0,0,0.08);
-    }
-
-    .query-btn {
-      padding: 13px 28px;
-      font-size: 15px;
-      font-weight: 700;
-      font-family: "Noto Sans SC", sans-serif;
-      background: linear-gradient(135deg, var(--red), var(--red-dark));
-      color: #fff;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-
-    .query-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(204,0,0,0.3);
-    }
-
-    /* ── Results ── */
-    #result-area { margin-top: 24px; }
-
-    .loading-state {
-      text-align: center;
-      padding: 40px;
-    }
-
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(204,0,0,0.15);
-      border-top-color: var(--red);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      margin: 0 auto 14px;
-    }
-
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    .loading-state p { font-size: 14px; color: var(--muted); }
-
-    .no-result {
-      text-align: center;
-      padding: 40px 20px;
-      color: var(--muted);
-      font-size: 15px;
-    }
-
-    .no-result .icon { font-size: 44px; display: block; margin-bottom: 12px; }
-
-    /* Result card */
-    .result-card {
-      background: var(--card);
-      border-radius: 16px;
-      border: 1px solid var(--border);
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-      animation: ticketIn 0.35s ease both;
-    }
-
-    @keyframes ticketIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .result-card-header {
-      background: linear-gradient(135deg, var(--red), var(--red-dark));
-      padding: 20px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .result-card-name {
-      color: #FFD700;
-      font-size: 18px;
-      font-weight: 700;
-      text-shadow: 0 0 8px rgba(255,215,0,0.5);
-    }
-
-    .result-card-meta {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .result-meta-item {
-      font-size: 13px;
-      color: rgba(255,255,255,0.8);
-    }
-
-    .result-meta-item strong { color: #fff; }
-
-    .result-card-body { padding: 24px; }
-
-    .tickets-label {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    .tickets-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      justify-content: center;
-    }
-
-    @media (max-width: 600px) {
-      .tickets-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        justify-content: unset;
-      }
-    }
-
-    .ticket-badge {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #1a0000 0%, #3d0000 40%, #6b0000 70%, #CC0000 100%);
-      border: 2px solid #C9A84C;
-      color: #FFE066;
-      font-size: 18px;
-      font-weight: 900;
-      padding: 14px 22px;
-      border-radius: 14px;
-      letter-spacing: 2px;
-      box-shadow: 0 4px 18px rgba(204,0,0,0.45), 0 0 0 1px rgba(201,168,76,0.3) inset;
-      transition: transform 0.18s, box-shadow 0.18s;
-      text-shadow: 0 0 10px rgba(255,224,102,0.8), 0 1px 2px rgba(0,0,0,0.6);
-      animation: ticketPop 0.4s cubic-bezier(.17,.67,.35,1.3) both;
-      white-space: nowrap;
-    }
-
-    @media (max-width: 600px) {
-      .ticket-badge {
-        font-size: 12px;
-        padding: 10px 8px;
-        border-radius: 10px;
-        letter-spacing: 0.5px;
-        text-align: center;
-        justify-self: stretch;
-      }
-    }
-
-    .ticket-badge::before {
-      content: "";
-      position: absolute;
-      top: -50%;
-      left: -70%;
-      width: 50%;
-      height: 200%;
-      background: linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.22) 50%, transparent 60%);
-      animation: ticketShimmer 2.8s ease-in-out infinite;
-    }
-
-    .ticket-badge:hover {
-      transform: scale(1.08) translateY(-3px);
-      box-shadow: 0 8px 28px rgba(204,0,0,0.6), 0 0 0 2px #C9A84C inset;
-    }
-
-    @keyframes ticketPop {
-      0%   { opacity: 0; transform: scale(0.7) rotate(-4deg); }
-      100% { opacity: 1; transform: scale(1) rotate(0deg); }
-    }
-
-    @keyframes ticketShimmer {
-      0%   { left: -70%; }
-      60%  { left: 130%; }
-      100% { left: 130%; }
-    }
-
-    .range-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-    }
-    .range-item {
-      display: inline-block;
-      background: rgba(255,224,102,0.1);
-      border: 1px solid rgba(255,215,0,0.35);
-      border-radius: 8px;
-      padding: 5px 14px;
-      font-size: 15px;
-      font-weight: 800;
-      color: #FFE066;
-      text-shadow: 0 0 8px rgba(255,224,102,0.5);
-      white-space: nowrap;
-    }
-    .range-sep { display: none; }
-
-    @media (max-width: 600px) {
-      .range-wrap {
-        display: block;
-      }
-      .range-item {
-        display: block;
-        text-align: center;
-        background: none;
-        border: none;
-        border-radius: 0;
-        padding: 0;
-        font-size: 17px;
-        line-height: 2.2;
-      }
-    }
-
-    @keyframes goldFlow {
-      0%   { background-position: 0% 50%; }
-      50%  { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-    .gold-animated {
-      background: linear-gradient(90deg, #FFD700, #FFF5A0, #C9A84C, #FFD700, #FFF0A0, #C9A84C);
-      background-size: 300% 100%;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      animation: goldFlow 2.5s ease infinite;
-      font-weight: 800;
-    }
-
-    .t-key { color: var(--muted); font-size: 11px; }
-    .t-val { color: var(--text); font-weight: 600; }
-    .t-val.amount { color: var(--red); }
-    .t-val.count { background: rgba(201,168,76,0.12); color: #7a5c00; padding: 2px 8px; border-radius: 10px; font-size: 12px; }
-
-    /* Summary */
-    .summary-bar {
-      margin-top: 20px;
-      padding: 20px 24px;
-      background: linear-gradient(135deg, rgba(204,0,0,0.05), rgba(201,168,76,0.08));
-      border: 1px solid rgba(204,0,0,0.12);
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      animation: ticketIn 0.4s 0.1s ease both;
-    }
-
-    .summary-count {
-      font-size: 54px;
-      font-weight: 900;
+    .headline em {
+      font-style: italic;
       color: var(--red);
-      line-height: 1;
-      flex-shrink: 0;
     }
 
-    .summary-info { font-size: 14px; color: var(--muted); line-height: 1.8; }
-    .summary-info strong { color: var(--text); font-size: 16px; }
-
-    /* ── Prizes ── */
-    .prizes-wrap {
-      position: relative;
-    }
-
-    .prizes-img-container {
-      position: relative;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.12);
-    }
-
-    .prizes-img-container img {
-      width: 100%;
-      display: block;
-    }
-
-    .prizes-overlay {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 20px 24px;
-      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 100%);
-    }
-
-    .prizes-overlay-text {
-      color: #fff;
-      font-size: 14px;
-      font-weight: 500;
-    }
-
-    .prizes-overlay-text strong { color: var(--gold-lt); font-size: 18px; }
-
-    .prize-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-      margin-top: 24px;
-    }
-
-    .prize-grid > div {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    @media (max-width: 600px) {
-      .prize-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 8px;
-        margin-top: 16px;
-      }
-      .prize-grid > div {
-        padding: 10px 12px !important;
-        border-radius: 10px !important;
-        gap: 6px;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .prize-grid > div span { font-size: 20px !important; }
-      .prize-grid > div .prize-name { font-size: 12px !important; }
-      .prize-grid > div .prize-count { font-size: 11px !important; }
-    }
-
-    /* ── Full-width Banner ── */
-    .full-banner {
-      width: 100%;
-      overflow: hidden;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .full-banner img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* ── About ── */
-    .about-layout {
-      display: flex;
-      gap: 32px;
-      align-items: flex-start;
-    }
-
-    .about-text-col { flex: 1; }
-
-    .about-text-col p {
+    .subhead {
       font-size: 15px;
-      line-height: 1.9;
       color: var(--muted);
-      margin-bottom: 16px;
+      margin-bottom: 28px;
+      line-height: 1.6;
     }
 
-    .about-text-col p strong { color: var(--text); }
-
-    .fb-btn-main {
+    /* ── Date badge ── */
+    .date-badge {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 24px;
+      background: rgba(201,168,76,0.1);
+      border: 1.5px solid rgba(201,168,76,0.3);
+      border-radius: 30px;
+      padding: 8px 20px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #7A5A00;
+      margin-bottom: 32px;
+    }
+    @media (prefers-color-scheme: dark) {
+      .date-badge { color: var(--gold-lt); }
+    }
+    :root[data-theme="dark"] .date-badge { color: var(--gold-lt); }
+
+    /* ── Divider ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 28px;
+      color: var(--border);
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .divider-icon { font-size: 16px; }
+
+    /* ── Thank you block ── */
+    .thanks {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.9;
+      margin-bottom: 28px;
+    }
+    .thanks strong { color: var(--red); font-weight: 700; }
+
+    /* ── Next event teaser ── */
+    .teaser {
+      background: linear-gradient(135deg, rgba(204,0,0,0.05), rgba(201,168,76,0.08));
+      border: 1px dashed rgba(201,168,76,0.4);
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+    .teaser strong { color: var(--text); font-weight: 700; }
+
+    /* ── CTA button ── */
+    .fb-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 24px;
       background: #1877F2;
       color: #fff;
-      border-radius: 10px;
-      font-size: 14px;
+      border-radius: 14px;
+      font-size: 15px;
       font-weight: 700;
       text-decoration: none;
-      transition: all 0.2s;
+      transition: opacity 0.2s, transform 0.15s;
+      margin-bottom: 14px;
+    }
+    .fb-btn:hover { opacity: 0.88; transform: translateY(-1px); }
+    .fb-btn svg { width: 20px; height: 20px; fill: #fff; flex-shrink: 0; }
+
+    /* ── Footer note ── */
+    .footer-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
       margin-top: 8px;
     }
 
-    .fb-btn-main:hover {
-      background: #1565d8;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(24,119,242,0.3);
-    }
-
-    /* ── Terms accordion ── */
-    .terms-intro {
-      background: rgba(204,0,0,0.04);
-      border: 1px solid rgba(204,0,0,0.12);
-      border-radius: 12px;
-      padding: 18px 22px;
-      font-size: 14px;
-      color: var(--text);
-      line-height: 1.8;
-      margin-bottom: 20px;
-    }
-
-    .terms-intro strong { color: var(--red); }
-
-    .terms-list {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-    }
-
-    .terms-item {
-      border-bottom: 1px solid rgba(201,168,76,0.12);
-      padding: 14px 20px;
-      font-size: 14px;
-      color: var(--muted);
-      line-height: 1.7;
-      display: flex;
-      gap: 12px;
-    }
-
-    .terms-item:last-child { border-bottom: none; }
-
-    .terms-num {
-      color: var(--gold);
-      font-weight: 700;
-      flex-shrink: 0;
-      min-width: 20px;
-    }
-
-    .terms-item span { color: var(--red); font-weight: 600; }
-
-    /* ── Contact ── */
-    .contact-layout {
-      display: flex;
-      gap: 32px;
-      align-items: flex-start;
-    }
-
-    .contact-img-col {
-      flex-shrink: 0;
-      width: 280px;
-    }
-
-    .contact-img-col img {
-      width: 100%;
-      border-radius: 12px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
-    }
-
-    .contact-info-col { flex: 1; }
-
-    .contact-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 14px;
-    }
-
-    .contact-card-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--muted);
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      margin-bottom: 14px;
-    }
-
-    .phone-chips {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .phone-chip-lg {
+    /* ── Company tag ── */
+    .company-tag {
+      margin-top: 36px;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 12px 16px;
-      border-radius: 10px;
-      border: 1.5px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      font-size: 16px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .phone-chip-lg:hover {
-      border-color: var(--red);
-      color: var(--red);
-      background: rgba(204,0,0,0.04);
-    }
-
-    /* ── Footer ── */
-    footer {
-      background: var(--red);
-      color: rgba(255,255,255,0.8);
-      text-align: center;
-      padding: 24px 20px;
-      font-size: 12px;
+      justify-content: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--muted);
       letter-spacing: 0.5px;
     }
-
-    footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
-    footer a:hover { color: #fff; }
-
-    /* ── Popup ── */
-    .popup-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(30,10,10,0.55);
-      backdrop-filter: blur(6px);
-      z-index: 999;
-      animation: fadeIn 0.2s ease;
-    }
-
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    .popup-box {
-      background: var(--card);
-      border-radius: 20px;
-      max-width: 440px;
-      width: 90%;
-      margin: 60px auto 0;
-      padding: 32px;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-      animation: popUp 0.3s ease;
-      border-top: 4px solid var(--red);
-    }
-
-    @keyframes popUp {
-      from { transform: translateY(16px); opacity: 0; }
-      to   { transform: translateY(0); opacity: 1; }
-    }
-
-    .popup-box h2 { font-size: 18px; color: var(--red); margin-bottom: 18px; }
-
-    .popup-eg {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-      margin-bottom: 10px;
-      font-size: 13px;
-      color: var(--muted);
-      line-height: 1.9;
-    }
-
-    .popup-eg strong { color: var(--red); }
-    .popup-eg .hl { color: var(--red); font-weight: 700; font-size: 15px; }
-
-    .popup-close-btn {
-      width: 100%;
-      margin-top: 16px;
-      padding: 13px;
-      background: linear-gradient(135deg, var(--red), var(--red-dark));
-      color: #fff;
-      font-size: 14px;
-      font-weight: 700;
-      font-family: "Noto Sans SC", sans-serif;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-
-    .popup-close-btn:hover { opacity: 0.88; }
-
-    /* ── Responsive ── */
-    @media (max-width: 900px) {
-      .sidebar { display: none; }
-      .mobile-nav { display: block; }
-      .hero { padding: 28px 20px; }
-      .hero-layout { flex-direction: column-reverse; gap: 24px; }
-      .hero-poster { width: 100%; max-width: 320px; margin: 0 auto; }
-      .section { padding: 32px 20px; }
-      .about-layout { flex-direction: column; }
-      .about-banner-col { width: 100%; }
-      .contact-layout { flex-direction: column; }
-      .contact-img-col { width: 100%; }
-      /* Header mobile shrink */
-      .site-header { height: 62px; padding: 0 14px; gap: 10px; }
-      .header-logo { width: 42px; height: 42px; border-radius: 8px; }
-      .header-company { font-size: 13px; }
-      .header-tagline { font-size: 10px; }
-      .header-help { font-size: 12px; padding: 7px 13px; }
-      .mobile-nav { top: 62px; }
+    .company-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
     }
 
     @media (max-width: 560px) {
-      .input-row { flex-direction: column; }
-      .query-btn { width: 100%; }
-      .summary-bar { flex-direction: column; text-align: center; gap: 8px; }
-      .summary-count { font-size: 44px; }
+      .card { padding: 40px 28px 36px; border-radius: 20px; }
+      .seal { width: 120px; height: 120px; }
+      .seal-inner { width: 94px; height: 94px; }
+      .seal-zh { font-size: 21px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .c, .seal-dots { animation: none; }
+      .seal-ring { animation: none; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── Confetti ── -->
-<div class="confetti-wrap" id="confettiWrap"></div>
+  <!-- Confetti -->
+  <div class="confetti" id="confetti"></div>
 
-<!-- ── Header ── -->
-<header class="site-header">
-  <div class="header-logo">
-    <img src="./images/logo.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<span class=logo-ph>COCO<br>小铺</span>'">
+  <div class="card">
+
+    <!-- Seal -->
+    <div class="seal">
+      <div class="seal-ring">
+        <canvas class="seal-dots" id="sealCanvas" width="148" height="148"></canvas>
+        <div class="seal-inner">
+          <span class="seal-zh">圆满</span>
+          <span class="seal-zh">结束</span>
+          <span class="seal-en">Completed</span>
+        </div>
+      </div>
+    </div>
+
+    <p class="eyebrow">Coco 小铺 · Lucky Draw 2026</p>
+    <h1 class="headline">幸运大抽奖<br><em>活动圆满结束</em></h1>
+    <p class="subhead">感谢所有参与本次活动的顾客</p>
+
+    <div class="date-badge">
+      🎉 抽奖日期：05 / 07 / 2026 已完成
+    </div>
+
+    <div class="divider"><span class="divider-icon">✦</span></div>
+
+    <p class="thanks">
+      感谢您在活动期间对 <strong>Coco 小铺</strong> 的支持与厚爱！<br>
+      本次幸运大抽奖已圆满落幕，<br>
+      获奖顾客将由我们直接联络通知。
+    </p>
+
+    <div class="teaser">
+      <strong>🔔 敬请期待下一次活动！</strong><br>
+      我们将持续为您带来更多精彩直播与好礼活动，<br>
+      关注我们的 Facebook 主页，第一时间获取最新消息。
+    </div>
+
+    <a class="fb-btn" href="https://www.facebook.com/cocopot.my" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+      </svg>
+      前往 Facebook 主页关注我们
+    </a>
+
+    <p class="footer-note">
+      如有任何疑问，请直接在 Facebook 主页私信我们，我们将尽快为您解答。
+    </p>
+
+    <div class="company-tag">
+      <span class="company-dot"></span>
+      COCO POT ENTERPRISE (M) SDN BHD
+      <span class="company-dot"></span>
+    </div>
+
   </div>
-  <div class="header-info">
-    <div class="header-company">COCO POT ENTERPRISE (M) SDN BHD</div>
-    <div class="header-tagline">Coco 小铺 · 精选生活好物</div>
-  </div>
-  <button class="header-help" onclick="openPopup()">📖 查询说明</button>
-</header>
 
-<!-- ── Mobile Nav ── -->
-<nav class="mobile-nav">
-  <div class="mobile-nav-inner">
-    <a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});setMobileActive(this);return false;">📺 直播活动</a>
-    <a href="#query"   onclick="setMobileActive(this)">🎫 抽奖查询</a>
-    <a href="#prizes"  onclick="setMobileActive(this)">🏆 奖品展示</a>
-    <a href="#terms"   onclick="setMobileActive(this)">📋 活动条款</a>
-    <a href="#about"   onclick="setMobileActive(this)">🏢 关于我们</a>
-    <a href="#contact" onclick="setMobileActive(this)">📞 联络方式</a>
-  </div>
-</nav>
-
-<!-- ── Body ── -->
-<div class="body-wrap">
-
-  <!-- ── Sidebar ── -->
-  <aside class="sidebar">
-    <!-- Logo area -->
-    <div class="sidebar-logo-area">
-      <div class="sidebar-logo-circle">
-        <img src="./images/logo.jpg" alt="Logo" onerror="this.parentElement.innerHTML='<div class=sidebar-logo-ph>COCO<br>小铺</div>'">
-      </div>
-      <div class="sidebar-brand">Coco 小铺</div>
-      <div class="sidebar-brand-sub">COCO POT ENTERPRISE (M) SDN BHD</div>
-    </div>
-
-    <!-- Navigation -->
-    <nav class="sidebar-nav">
-      <div class="nav-label">🧭 NAVIGATION 导航</div>
-      <a class="nav-item" href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});setActive(this);return false;">
-        <span class="nav-icon">📺</span> 直播活动
-      </a>
-      <a class="nav-item active" href="#query" onclick="setActive(this)">
-        <span class="nav-icon">🎫</span> 抽奖券查询
-      </a>
-      <a class="nav-item" href="#prizes" onclick="setActive(this)">
-        <span class="nav-icon">🏆</span> 奖品展示
-      </a>
-      <a class="nav-item" href="#terms" onclick="setActive(this)">
-        <span class="nav-icon">📋</span> 活动条款
-      </a>
-      <a class="nav-item" href="#about" onclick="setActive(this)">
-        <span class="nav-icon">🏢</span> 关于我们
-      </a>
-      <a class="nav-item" href="#contact" onclick="setActive(this)">
-        <span class="nav-icon">📞</span> 联络方式
-      </a>
-    </nav>
-
-    <!-- Bottom -->
-    <div class="sidebar-bottom">
-      <a class="fb-btn-side" href="https://www.facebook.com/Coco800821" target="_blank" rel="noopener">
-        <svg class="fb-icon" viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-        关注 Facebook 主页
-      </a>
-      <div class="phone-list">
-        <a class="phone-item" href="tel:+60187707002">📱 018-7707002</a>
-        <a class="phone-item" href="tel:+60107603957">📱 010-7603957</a>
-      </div>
-      <div style="margin-top:10px;font-size:11px;color:#CC0000;background:rgba(204,0,0,0.05);border-radius:6px;padding:8px 10px;line-height:1.6;">
-        ⚠️ 此联络号码仅供<strong>商业合作洽谈</strong>，不提供客服售后服务
-      </div>
-    </div>
-  </aside>
-
-  <!-- ── Main Content ── -->
-  <main class="main-content">
-
-    <!-- Hero -->
-    <div class="hero">
-      <div class="hero-layout">
-        <div class="hero-text">
-          <div class="hero-eyebrow">✨ Lucky Draw 2026</div>
-          <h1 class="hero-title">
-            <span class="hero-title-zh">幸运大抽奖</span>
-            Lucky Draw
-          </h1>
-          <p class="hero-subtitle">
-            在 <strong>Coco 小铺</strong> Facebook 直播消费满 <strong>RM50</strong>，
-            即可获得一次抽奖机会！豪华奖品等你来赢 🎁
-          </p>
-          <div class="hero-tags">
-            <span class="hero-tag red">📅 01/05/2026 — 06/06/2026</span>
-            <span class="hero-tag gold">🛒 满 RM50 = 1 张抽奖券</span>
-            <span class="hero-tag red">🎰 Facebook 直播现场抽奖</span>
-          </div>
-        </div>
-        <div class="hero-poster" id="activity">
-          <div class="stories-wrap" id="storiesWrap">
-            <div class="stories-bars" id="storiesBars"></div>
-            <img class="stories-bg" id="storiesBg" src="./images/activity.jpg" aria-hidden="true">
-            <img class="stories-bg stories-bg-next" id="storiesBgNext" src="" aria-hidden="true">
-            <img class="stories-img" id="storiesImg" src="./images/activity.jpg" alt="活动照片">
-            <img class="stories-img-next" id="storiesImgNext" alt="">
-            <div class="stories-prev" onclick="storiesPrev()"></div>
-            <div class="stories-next" onclick="storiesNext()"></div>
-          </div>
-          <div class="stories-marquee">
-            <span class="stories-marquee-track">
-              🛒 买满 RM50 得 1 张幸运抽奖券 &nbsp;✨&nbsp;
-              🎫 消费越多，抽奖券越多！&nbsp;🏆&nbsp;
-              豪华大奖等你来赢！&nbsp;🎉&nbsp;
-              📅 活动期间 01/05 — 06/06/2026 &nbsp;🔥&nbsp;
-              🛒 买满 RM50 得 1 张幸运抽奖券 &nbsp;✨&nbsp;
-              🎫 消费越多，抽奖券越多！&nbsp;🏆&nbsp;
-              豪华大奖等你来赢！&nbsp;🎉&nbsp;
-              📅 活动期间 01/05 — 06/06/2026 &nbsp;🔥&nbsp;
-            </span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ── Schedule ── -->
-    <section class="section" id="schedule">
-      <div class="sec-header">
-        <div class="sec-icon">📺</div>
-        <div>
-          <div class="sec-title-text">直播活动</div>
-          <div class="sec-title-sub">Live Stream Schedule &amp; Highlights</div>
-        </div>
-      </div>
-
-      <div class="schedule-list">
-        <div class="schedule-card">
-          <div class="schedule-date">
-            <div class="day" style="font-size:22px;">05</div>
-            <div class="month">Jul 2026</div>
-          </div>
-          <div class="schedule-divider"></div>
-          <div class="schedule-info">
-            <div class="schedule-title">🎉 幸运大抽奖 — 直播现场抽奖</div>
-            <div class="schedule-desc">Facebook 直播公开抽奖，豪华大奖即将揭晓！抽奖日期敬请期待。</div>
-          </div>
-          <div class="schedule-status status-upcoming">📅 05/07/2026</div>
-        </div>
-        <div class="schedule-card">
-          <div class="schedule-date">
-            <div class="day">01 May</div>
-            <div class="day">06 June</div>
-            <div class="month">2026</div>
-          </div>
-          <div class="schedule-divider"></div>
-          <div class="schedule-info">
-            <div class="schedule-title">🛒 活动期间 — 每单满 RM50 得抽奖券</div>
-            <div class="schedule-desc">在 Coco 小铺 Facebook 直播消费，满 RM50 自动获得 1 张幸运抽奖券</div>
-          </div>
-          <div class="schedule-status status-live">🔴 进行中</div>
-        </div>
-      </div>
-
-      <div class="highlights-grid">
-        <div class="highlight-card">
-          <div class="highlight-icon">🎁</div>
-          <div class="highlight-title">豪华奖品</div>
-          <div class="highlight-desc">总价值 5 位数，精心挑选的高品质奖品</div>
-        </div>
-        <div class="highlight-card">
-          <div class="highlight-icon">📱</div>
-          <div class="highlight-title">全程直播</div>
-          <div class="highlight-desc">Facebook 公开直播抽奖，公平公正公开</div>
-        </div>
-        <div class="highlight-card">
-          <div class="highlight-icon">🛒</div>
-          <div class="highlight-title">消费即得</div>
-          <div class="highlight-desc">满 RM50 自动获得抽奖券，消费越多机会越多</div>
-        </div>
-        <div class="highlight-card">
-          <div class="highlight-icon">🏆</div>
-          <div class="highlight-title">现场公布</div>
-          <div class="highlight-desc">抽奖结果实时公布，获奖者当场联络确认</div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Query ── -->
-    <section class="section" id="query">
-      <div class="sec-header">
-        <div class="sec-icon" style="background:rgba(204,0,0,0.12);font-size:26px;width:52px;height:52px;">🎫</div>
-        <div>
-          <div class="sec-title-text" style="color:var(--red);font-size:clamp(20px,3vw,26px);">抽奖券查询</div>
-          <div class="sec-title-sub">输入您的订单收货人电话号码 + 收件人名字首字即可查询</div>
-        </div>
-      </div>
-
-      <div class="query-card">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap;">
-          <span style="font-size:22px;animation:badgePulse 1.8s ease-in-out infinite;">🎟️</span>
-          <span style="font-size:15px;font-weight:700;color:var(--red);flex:1;">输入您的信息，立即查看您的幸运抽奖券！</span>
-          <button onclick="openInfoPopup()" style="flex-shrink:0;font-size:12px;font-weight:700;padding:6px 13px;border-radius:20px;border:1.5px solid rgba(201,168,76,0.5);background:rgba(201,168,76,0.1);color:#7a5a00;cursor:pointer;transition:all 0.2s;white-space:nowrap;">📖 查询说明</button>
-        </div>
-        <div id="queryGuide" style="max-height:200px;opacity:1;overflow:hidden;transition:max-height 0.35s ease,opacity 0.3s ease;background:rgba(201,168,76,0.07);border-radius:10px;border:1px solid rgba(201,168,76,0.25);padding:0 16px;margin-bottom:12px;">
-          <div style="padding:14px 0;">
-            <p style="font-size:13px;color:#555;line-height:1.9;margin:0;">
-              请输入 <strong>订单收货人电话号码</strong> + <strong>订单收件人名字首字</strong><br>
-              📌 示例 1：电话 012-3456789，收件人 Coco Pot → 输入 <strong>0123456789C</strong><br>
-              📌 示例 2：电话 012-3456789，收件人 苏展乐 → 输入 <strong>0123456789苏</strong><br>
-              💡 号码支持 +60 / 60 / 0 开头，系统自动识别
-            </p>
-          </div>
-        </div>
-        <p class="query-hint" style="display:none;">
-          请输入 <strong>订单收货人电话号码</strong> + <strong>Facebook 名字首字</strong><br>
-          示例 1：电话 012-3456789，名字 Coco Pot → 输入 <strong>0123456789C</strong><br>
-          示例 2：电话 012-3456789，名字 苏展乐 → 输入 <strong>0123456789苏</strong>
-        </p>
-        <div class="input-row">
-          <input
-            class="query-input"
-            id="queryInput"
-            type="text"
-            placeholder="例：收货人电话 + 名字首字，如 0123456789C"
-            autocomplete="off"
-            spellcheck="false"
-            onkeydown="if(event.key==='Enter') doSearch()"
-          >
-          <button class="query-btn" onclick="doSearch()">查 询</button>
-        </div>
-        <div id="result-area"></div>
-      </div>
-    </section>
-
-    <!-- ── Prizes ── -->
-    <section class="section" id="prizes">
-      <div class="sec-header">
-        <div class="sec-icon">🏆</div>
-        <div>
-          <div class="sec-title-text">丰富奖品</div>
-          <div class="sec-title-sub">iPhone 17、iPad、现金 RM888 及更多豪礼</div>
-        </div>
-      </div>
-
-      <div class="prizes-wrap">
-        <div class="prizes-img-container">
-          <img src="./images/prizes.jpg" alt="抽奖礼品">
-          <div class="prizes-overlay">
-            <div class="prizes-overlay-text">
-              总奖品价值 <strong>5 位数</strong>，好运属于你！
-            </div>
-          </div>
-        </div>
-
-        <!-- Prize list -->
-        <div class="prize-grid">
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">📱</span>
-            <div>
-              <div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">iPhone 17</div>
-              <div class="prize-count" style="font-size:12px;color:var(--muted);">× 1 台</div>
-            </div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">📲</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">iPad（10代）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">1台 × 3份</div></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">💵</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--red);font-size:14px;">现金 RM888</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 3份</div></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">🍳</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">空气炸锅</div><div class="prize-count" style="font-size:12px;color:var(--muted);">1台 × 5份</div></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">🍚</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">电饭锅</div><div class="prize-count" style="font-size:12px;color:var(--muted);">1台 × 5份</div></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">🫖</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">养生壶</div><div class="prize-count" style="font-size:12px;color:var(--muted);">1台 × 5份</div></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">🎧</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">耳机（ANC降噪）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">1台 × 10份</div></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">💨</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（橙色）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">1台 × 10份</div></div>
-          </div>
-
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">💨</span>
-            <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">吹风筒（紫色）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">1台 × 10份</div></div>
-          </div>
-
-          <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">🛍️</span>
-            <div><div class="prize-name" style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM100</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 88 份</div></div>
-          </div>
-
-          <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
-            <span style="font-size:28px;">🛍️</span>
-            <div><div class="prize-name" style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM50</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 88 份</div></div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Terms ── -->
-    <section class="section" id="terms">
-      <div class="sec-header">
-        <div class="sec-icon">📋</div>
-        <div>
-          <div class="sec-title-text">活动条款</div>
-          <div class="sec-title-sub">Terms & Conditions</div>
-        </div>
-      </div>
-
-      <div class="terms-intro">
-        活动期间凡在 <strong>Coco 小铺 Facebook 直播</strong> 消费满 <strong>RM50</strong>，
-        即获得 <strong>1 张</strong>幸运抽奖券（无上限，单笔订单单独计算）。
-        抽奖将于 <strong>Facebook 现场直播</strong> 公开进行，确保公平公正！
-      </div>
-
-      <div class="terms-list">
-        <div class="terms-item"><span class="terms-num">1</span><div>本活动开放予<span>马来西亚及新加坡</span>居民参与，凡在活动期间于指定平台消费达指定金额，即自动获得抽奖资格，无需额外报名。</div></div>
-        <div class="terms-item"><span class="terms-num">2</span><div>活动有效期为 <span>01/05/2026 至 06/06/2026</span>，逾期付款订单将不被受理。</div></div>
-        <div class="terms-item"><span class="terms-num">3</span><div>每笔订单消费满 <span>RM50</span> 即获得 1 张抽奖券，张数无上限，以<span>单笔订单独立计算</span>。<strong style="color:#CC0000">多笔订单不可合并累计</strong>——例如：同一位顾客下了两笔各 RM90 的订单，每笔各得 1 张，合计 2 张；<strong style="color:#CC0000;font-size:15px;background:rgba(204,0,0,0.07);padding:1px 6px;border-radius:4px;">❌ 并非 RM90＋RM90＝RM180 合并计算为 3 张</strong></div></div>
-        <div class="terms-item"><span class="terms-num">4</span><div>抽奖将通过 <span>Facebook 现场直播</span> 方式进行，确保公平公正。</div></div>
-        <div class="terms-item"><span class="terms-num">5</span><div>中奖名单将通过官网、社交媒体或电话公布及通知。</div></div>
-        <div class="terms-item"><span class="terms-num">6</span><div>中奖者需提供有效身份证明及相关资料以领取奖品。</div></div>
-        <div class="terms-item"><span class="terms-num">7</span><div>所有奖品不可兑换现金或转让。</div></div>
-        <div class="terms-item"><span class="terms-num">8</span><div>参与者同意主办方在活动相关范围内使用其个人资料（如姓名、照片）作宣传用途，无需额外补偿。</div></div>
-        <div class="terms-item"><span class="terms-num">9</span><div>最终解释权归主办方 <span>COCO POT ENTERPRISE (M) SDN BHD</span> 所有。</div></div>
-      </div>
-    </section>
-
-    <!-- ── Full-width Banner (above About) ── -->
-    <div class="full-banner">
-      <img src="./images/banner.jpg" alt="Coco 小铺横幅" onerror="this.style.display='none'">
-    </div>
-
-    <!-- ── About ── -->
-    <section class="section" id="about">
-      <div class="sec-header">
-        <div class="sec-icon">🏢</div>
-        <div>
-          <div class="sec-title-text">关于我们</div>
-          <div class="sec-title-sub">About Coco 小铺</div>
-        </div>
-      </div>
-
-      <div class="about-layout">
-        <div class="about-text-col">
-          <p><strong>Coco 小铺</strong> 是一间专注于精选优质生活好物的直播电商平台，坚持「慢慢挑，只留值得的」理念。</p>
-          <p>每周上新，为您分享真实好物，不虚假宣传，只推荐真正值得购买的产品。</p>
-          <p>旗下公司 <strong>COCO POT ENTERPRISE (M) SDN BHD</strong> 在马来西亚正式注册运营，致力于为每一位顾客带来安心、优质的购物体验。</p>
-          <a class="fb-btn-main" href="https://www.facebook.com/Coco800821" target="_blank" rel="noopener">
-            <svg class="fb-icon" viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-            前往 Facebook 主页
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── Contact ── -->
-    <section class="section" id="contact">
-      <div class="sec-header">
-        <div class="sec-icon">📞</div>
-        <div>
-          <div class="sec-title-text">联络方式</div>
-          <div class="sec-title-sub">合作洽谈 · 客服咨询</div>
-        </div>
-      </div>
-
-      <div class="contact-layout">
-        <div class="contact-img-col">
-          <img src="./images/contact.jpg" alt="合作联络" onerror="this.style.display='none'">
-        </div>
-        <div class="contact-info-col">
-
-          <!-- 合作热线 -->
-          <div class="contact-card">
-            <div class="contact-card-title">🤝 合作热线</div>
-            <div class="phone-chips">
-              <a class="phone-chip-lg" href="tel:+60187707002">📱 018-7707002</a>
-              <a class="phone-chip-lg" href="tel:+60107603957">📱 010-7603957</a>
-            </div>
-            <div style="margin-top:10px;font-size:12px;color:#CC0000;background:rgba(204,0,0,0.05);border-radius:6px;padding:8px 10px;">
-              ⚠️ 此号码仅供<strong>商业合作洽谈</strong>，不提供客服售后服务
-            </div>
-          </div>
-
-          <!-- 商务邮件 -->
-          <div class="contact-card">
-            <div class="contact-card-title">📧 商务邮件</div>
-            <div class="phone-chips">
-              <a class="phone-chip-lg" href="mailto:cocopot.admin@gmail.com" style="font-size:13px;">✉️ cocopot.admin@gmail.com</a>
-            </div>
-            <div style="margin-top:10px;font-size:12px;color:#CC0000;background:rgba(204,0,0,0.05);border-radius:6px;padding:8px 10px;">
-              ⚠️ 此邮件仅供<strong>商业合作洽谈</strong>，不提供客服售后服务
-            </div>
-          </div>
-
-          <!-- 温馨提示 -->
-          <div style="background:rgba(255,193,7,0.08);border:1px solid rgba(255,193,7,0.3);border-left:4px solid #C9A84C;border-radius:10px;padding:16px 18px;">
-            <div style="font-size:13px;font-weight:700;color:#8a6a00;margin-bottom:8px;">📌 温馨提示</div>
-            <div style="font-size:13px;color:#666;line-height:1.8;">
-              以上联络方式<strong style="color:#CC0000;">仅供商业合作洽谈</strong>（如直播带货、品牌合作等）使用。<br>
-              如需<strong>售后服务或订单查询</strong>，请直接前往我们的 Facebook 主页私信联络，客服团队将尽快为您跟进，谢谢您的理解与支持 ❤️
-            </div>
-            <a class="fb-btn-main" style="margin-top:12px;width:100%;justify-content:center;font-size:13px;" href="https://www.facebook.com/Coco800821" target="_blank" rel="noopener">
-              <svg class="fb-icon" viewBox="0 0 24 24"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.97h-1.513c-1.491 0-1.956.93-1.956 1.887v2.268h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z"/></svg>
-              前往 Facebook 主页私信客服
-            </a>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-  </main>
-</div>
-
-<!-- ── Footer ── -->
-<footer>
-  <p>© 2026 COCO POT ENTERPRISE (M) SDN BHD · All Rights Reserved</p>
-  <p style="margin-top:6px;">
-    <a href="https://www.facebook.com/Coco800821" target="_blank">Facebook</a> &nbsp;·&nbsp;
-    <a href="tel:+60187707002">018-7707002</a> &nbsp;·&nbsp;
-    <a href="tel:+60107603957">010-7603957</a>
-  </p>
-</footer>
-
-<!-- ── Info Popup（查询卡片内触发，不跳转）── -->
-<div id="infoPopup" class="popup-overlay" onclick="if(event.target===this)closeInfoPopup()" style="display:none;">
-  <div class="popup-box">
-    <h2>📖 查询说明</h2>
-    <div class="popup-eg">
-      <strong>示例 1</strong><br>
-      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：Coco Pot<br>
-      请输入：<span class="hl">0123456789C</span>
-    </div>
-    <div class="popup-eg">
-      <strong>示例 2</strong><br>
-      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：苏展乐<br>
-      请输入：<span class="hl">0123456789苏</span>
-    </div>
-    <p style="font-size:12px;color:var(--muted);text-align:center;margin-top:10px;">💡 号码支持 +60 / 60 / 0 开头，系统自动识别</p>
-    <button class="popup-close-btn" onclick="closeInfoPopup()">我知道了 ✨</button>
-  </div>
-</div>
-
-<!-- ── Popup ── -->
-<div id="popup" class="popup-overlay" onclick="if(event.target===this)closePopup()">
-  <div class="popup-box">
-    <h2>🎫 查询说明</h2>
-    <div class="popup-eg">
-      <strong>示例 1</strong><br>
-      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：Coco Pot<br>
-      请输入：<span class="hl">0123456789C</span>
-    </div>
-    <div class="popup-eg">
-      <strong>示例 2</strong><br>
-      收货人电话：012-3456789 &nbsp;·&nbsp; 收件人：苏展乐<br>
-      请输入：<span class="hl">0123456789苏</span>
-    </div>
-    <button class="popup-close-btn" onclick="closePopup();document.getElementById('query').scrollIntoView({behavior:'smooth'});">我知道了，开始查询 ✨</button>
-  </div>
-</div>
-
-<script>
-  // ── CONFIG ───────────────────────────────────────────────
-  const GAS_URL = "https://script.google.com/macros/s/AKfycbweb64e3w-izwS7ox1kMbB1NWwCOXuD-IttbcX6P7ZTMkSq_yp6a51oxCsXVapxI6HV7g/exec";
-  // ────────────────────────────────────────────────────────
-
-  // Popup
-  window.onload = () => {
-    document.getElementById("popup").style.display = "block";
-    initConfetti();
-    storiesInit();
-  };
-  function openPopup()     { document.getElementById("popup").style.display = "block"; }
-  function closePopup()    { document.getElementById("popup").style.display = "none"; }
-  function openInfoPopup() { document.getElementById("infoPopup").style.display = "block"; }
-  function closeInfoPopup(){ document.getElementById("infoPopup").style.display = "none"; }
-
-  // Nav active state
-  function setActive(el) {
-    document.querySelectorAll(".nav-item").forEach(n => n.classList.remove("active"));
-    el.classList.add("active");
-  }
-
-  function setMobileActive(el) {
-    document.querySelectorAll(".mobile-nav a").forEach(a => a.classList.remove("active"));
-    el.classList.add("active");
-  }
-
-  // Intersection Observer — auto highlight nav
-  const sections = ["schedule","query","prizes","terms","about","contact"];
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        const id = e.target.id;
-        document.querySelectorAll(".nav-item").forEach(n => {
-          n.classList.toggle("active", n.getAttribute("href") === "#" + id);
-        });
-        document.querySelectorAll(".mobile-nav a").forEach(a => {
-          a.classList.toggle("active", a.getAttribute("href") === "#" + id);
-        });
+  <script>
+    // ── Confetti ─────────────────────────────────────────────
+    (function() {
+      const wrap = document.getElementById("confetti");
+      const COLORS = ["#CC0000","#E83030","#C9A84C","#F0D870","#fff","#FFB3B3"];
+      const N = 28;
+      for (let i = 0; i < N; i++) {
+        const el = document.createElement("div");
+        el.className = "c";
+        el.style.left        = Math.random() * 100 + "%";
+        el.style.top         = -(Math.random() * 40) + "%";
+        el.style.background  = COLORS[Math.floor(Math.random() * COLORS.length)];
+        el.style.animationDuration  = (6 + Math.random() * 10) + "s";
+        el.style.animationDelay     = (Math.random() * 8) + "s";
+        el.style.width       = (5 + Math.random() * 5) + "px";
+        el.style.height      = (10 + Math.random() * 10) + "px";
+        el.style.borderRadius = Math.random() > 0.5 ? "50%" : "2px";
+        wrap.appendChild(el);
       }
-    });
-  }, { threshold: 0.3 });
+    })();
 
-  sections.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) observer.observe(el);
-  });
-
-  // Query
-  async function doSearch() {
-    const val  = document.getElementById("queryInput").value.trim();
-    const area = document.getElementById("result-area");
-
-    if (!val) {
-      area.innerHTML = `<div class="no-result"><span class="icon">⚠️</span>请输入电话号码 + FB 名字首字</div>`;
-      return;
-    }
-
-    area.innerHTML = `<div class="loading-state"><div class="spinner"></div><p>查询中，请稍候...</p></div>`;
-
-    try {
-      const res  = await fetch(`${GAS_URL}?q=${encodeURIComponent(val)}`);
-      if (!res.ok) throw new Error("HTTP " + res.status);
-      const data = await res.json();
-      if (data && data.error) throw new Error(data.error);
-      renderResult(data);
-    } catch (err) {
-      area.innerHTML = `<div class="no-result"><span class="icon">❌</span>查询失败，请稍后再试<br><small style="font-size:11px;opacity:.5">${esc(err.message)}</small></div>`;
-    }
-  }
-
-  function renderResult(data) {
-    const area = document.getElementById("result-area");
-
-    if (!data || data.length === 0) {
-      area.innerHTML = `
-        <div class="no-result">
-          <span class="icon">🔍</span>
-          查不到相关资料<br>
-          <small style="font-size:12px;opacity:.6">请确认输入格式是否正确，或联系客服查询</small>
-        </div>`;
-      return;
-    }
-
-    const first = data[0];
-    const totalTickets = data.length;
-
-    // 按订单分组
-    const orders = {};
-    data.forEach(d => {
-      const key = d.order;
-      if (!orders[key]) orders[key] = { order: d.order, amount: d.amount, tickets: [] };
-      orders[key].tickets.push(d.lucky);
-    });
-
-    let ticketBadges = data.map((d, i) => `<span class="ticket-badge" style="animation-delay:${i * 0.07}s">🎫 ${esc(d.lucky)}</span>`).join("");
-
-    let orderRows = Object.values(orders).map(o => `
-      <div style="padding:10px 14px;border-bottom:1px solid rgba(201,168,76,0.15);display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;">
-        <span style="font-size:12px;color:var(--muted);flex:1 1 100%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">📄 ${esc(o.order)}</span>
-        <span style="font-weight:700;color:var(--red);font-size:14px;">RM ${parseFloat(o.amount||0).toFixed(2)}</span>
-        <span style="margin-left:auto;background:rgba(201,168,76,0.15);color:#7a5c00;padding:3px 12px;border-radius:20px;font-size:12px;font-weight:700;white-space:nowrap;">× ${o.tickets.length} 张</span>
-      </div>`).join("");
-
-    const html = `
-      <div class="result-card">
-        <div class="result-card-header">
-          <div>
-            <div class="gold-animated" style="font-size:11px;letter-spacing:2px;margin-bottom:4px;">LUCKY DRAW PARTICIPANT</div>
-            <div class="result-card-name">🎉 ${esc(first.name)}</div>
-          </div>
-          <div style="text-align:right;">
-            <div style="font-size:36px;font-weight:900;color:#FFD700;line-height:1;text-shadow:0 0 10px rgba(255,215,0,0.5);">${totalTickets}</div>
-            <div style="font-size:12px;color:#FFD700;opacity:0.85;">张幸运抽奖券</div>
-          </div>
-        </div>
-
-        <div style="padding:14px 20px 16px;background:linear-gradient(135deg,#7a0000,#4a0000);border-top:2px solid #C9A84C;border-bottom:2px solid #C9A84C;">
-          <span class="gold-animated" style="font-size:16px;letter-spacing:2px;display:block;margin-bottom:10px;">📌 号码区间</span>
-          <div class="range-wrap">
-            ${getTicketRanges(data.map(d=>d.lucky))}
-          </div>
-        </div>
-
-        <div class="result-card-body">
-          ${Object.keys(orders).length > 0 ? (() => {
-            const totalAmt = Object.values(orders).reduce((sum, o) => sum + parseFloat(o.amount || 0), 0);
-            return `
-          <div style="margin-bottom:24px;">
-            <div class="tickets-label">📋 订单明细</div>
-            <div style="border-radius:10px;overflow:hidden;border:1px solid rgba(201,168,76,0.25);">
-              <div style="background:rgba(201,168,76,0.12);padding:7px 14px;display:flex;gap:12px;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1px;border-bottom:1px solid rgba(201,168,76,0.25);">
-                <span style="flex:1;">订单号</span><span>消费金额</span><span style="min-width:52px;text-align:right;">抽奖券数</span>
-              </div>
-              ${orderRows}
-              <div style="padding:10px 14px;background:rgba(201,168,76,0.08);border-top:2px solid rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:space-between;">
-                <span style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1px;">消费总金额</span>
-                <span style="font-size:18px;font-weight:900;color:var(--red);">RM ${totalAmt.toFixed(2)}</span>
-              </div>
-            </div>
-          </div>`;
-          })() : ""}
-
-          <div class="tickets-label">🎫 抽奖券号码（共 ${totalTickets} 张）</div>
-          <div class="tickets-grid">${ticketBadges}</div>
-
-          <div style="margin-top:20px;padding:14px 16px;background:rgba(201,168,76,0.06);border-radius:10px;font-size:13px;color:var(--muted);line-height:1.8;text-align:center;">
-            抽奖将于 <strong style="color:var(--text);">Facebook 直播现场</strong> 公开进行，请持续关注！🍀<br>
-            祝您好运，奖品等着您 🎁
-          </div>
-        </div>
-      </div>`;
-
-    area.innerHTML = html;
-  }
-
-  function esc(s) {
-    return String(s ?? "").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
-  }
-
-  // 解析票号 → { prefix, num, padLen }，无法解析返回 null
-  function parseTicket(t) {
-    const m = String(t).match(/^(.*?)(\d+)$/);
-    if (!m) return null;
-    return { prefix: m[1], num: parseInt(m[2], 10), padLen: m[2].length, raw: t };
-  }
-
-  // 把一组票号（同前缀）整理成连号区间字符串
-  function getTicketRanges(tickets) {
-    // 先按前缀分组
-    const groups = {};
-    tickets.forEach(t => {
-      const p = parseTicket(t);
-      if (!p) { (groups["__raw__"] = groups["__raw__"] || []).push(t); return; }
-      (groups[p.prefix] = groups[p.prefix] || []).push(p);
-    });
-
-    const parts = [];
-
-    Object.entries(groups).forEach(([prefix, items]) => {
-      if (prefix === "__raw__") { items.forEach(t => parts.push(esc(t))); return; }
-
-      // 按数字排序
-      items.sort((a, b) => a.num - b.num);
-
-      // 合并连号
-      const ranges = [];
-      let start = items[0], end = items[0];
-      for (let i = 1; i < items.length; i++) {
-        if (items[i].num === end.num + 1) {
-          end = items[i];
-        } else {
-          ranges.push([start, end]);
-          start = end = items[i];
+    // ── Rotating dots around seal ─────────────────────────────
+    (function() {
+      const canvas = document.getElementById("sealCanvas");
+      const ctx    = canvas.getContext("2d");
+      const W = 148, CX = W/2, CY = W/2, R = 68;
+      const DOTS = 24;
+      let angle = 0;
+      function draw() {
+        ctx.clearRect(0, 0, W, W);
+        for (let i = 0; i < DOTS; i++) {
+          const a = angle + (i / DOTS) * Math.PI * 2;
+          const x = CX + Math.cos(a) * R;
+          const y = CY + Math.sin(a) * R;
+          const alpha = 0.25 + 0.55 * ((Math.sin(a * 2 + angle * 3) + 1) / 2);
+          ctx.beginPath();
+          ctx.arc(x, y, i % 3 === 0 ? 2.5 : 1.6, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(201,168,76,${alpha})`;
+          ctx.fill();
+        }
+        angle += 0.008;
+        requestAnimationFrame(draw);
+      }
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) draw();
+      else {
+        // Static dots if reduced motion
+        ctx.fillStyle = "rgba(201,168,76,0.4)";
+        for (let i = 0; i < DOTS; i++) {
+          const a = (i / DOTS) * Math.PI * 2;
+          ctx.beginPath();
+          ctx.arc(CX + Math.cos(a)*R, CY + Math.sin(a)*R, 2, 0, Math.PI*2);
+          ctx.fill();
         }
       }
-      ranges.push([start, end]);
-
-      ranges.forEach(([s, e]) => {
-        const fmt = n => prefix + String(n).padStart(s.padLen, "0");
-        parts.push(s.num === e.num ? esc(fmt(s.num)) : `${esc(fmt(s.num))} ~ ${esc(fmt(e.num))}`);
-      });
-    });
-
-    return parts.map(p => `<span class="range-item">${p}</span>`).join('<span class="range-sep"> | </span>');
-  }
-
-  // ── Confetti ─────────────────────────────────────────────
-  // ── Stories 轮播 ─────────────────────────────────────────
-  const STORIES  = [1,2,3,4,5,6,7,8,9].map(n => n === 1 ? "./images/activity.jpg" : `./images/activity${n}.jpg`);
-  const STORY_DUR = 4000;
-  let sIdx = 0, sTimer = null;
-  let sPaused = false, sElapsed = 0, sPauseStart = 0;
-  let sPtrX = 0, sPtrY = 0;
-
-  // 预加载所有图片，避免快速切换时空白/重复
-  const sPreloaded = STORIES.map(src => { const img = new Image(); img.src = src; return img; });
-
-  function storiesInit() {
-    const bars = document.getElementById("storiesBars");
-    bars.innerHTML = STORIES.map((_, i) =>
-      `<div class="stories-bar" id="sbar${i}"><div class="stories-bar-fill"></div></div>`
-    ).join("");
-    storiesGo(0);
-
-    const wrap = document.getElementById("storiesWrap");
-
-    // 用 Pointer Events 统一处理鼠标和触摸，避免手机上触发两次的问题
-    wrap.addEventListener("pointerdown", e => {
-      sPtrX = e.clientX; sPtrY = e.clientY;
-      storiesPause();
-    });
-    wrap.addEventListener("pointerup", e => {
-      storiesResume();
-      const dx = e.clientX - sPtrX;
-      const dy = e.clientY - sPtrY;
-      if (Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
-        dx < 0 ? storiesNext() : storiesPrev();
-      }
-    });
-    wrap.addEventListener("pointerleave",  storiesResume);
-    wrap.addEventListener("pointercancel", storiesResume);
-  }
-
-  function storiesPause() {
-    if (sPaused) return;
-    sPaused = true;
-    sPauseStart = Date.now();
-    clearTimeout(sTimer);
-    const fill = document.querySelector("#sbar" + sIdx + " .stories-bar-fill");
-    if (fill) fill.style.animationPlayState = "paused";
-  }
-
-  function storiesResume() {
-    if (!sPaused) return;
-    sPaused = false;
-    sElapsed += Date.now() - sPauseStart;
-    const remaining = Math.max(0, STORY_DUR - sElapsed);
-    const fill = document.querySelector("#sbar" + sIdx + " .stories-bar-fill");
-    if (fill) fill.style.animationPlayState = "running";
-    sTimer = setTimeout(() => storiesGo(sIdx + 1), remaining);
-  }
-
-  let sAnimating = false;
-
-  // ── 切换效果配置 ──────────────────────────────────────────
-  const sEffect = 'zoom';
-
-  function updateBars() {
-    STORIES.forEach((_, j) => {
-      const bar = document.getElementById("sbar" + j);
-      if (!bar) return;
-      bar.classList.remove("done", "active");
-      bar.querySelector(".stories-bar-fill").style.animation = "none";
-      if (j < sIdx) {
-        bar.classList.add("done");
-      } else if (j === sIdx) {
-        bar.querySelector(".stories-bar-fill").style.setProperty("--dur", STORY_DUR / 1000 + "s");
-        void bar.querySelector(".stories-bar-fill").offsetWidth;
-        bar.querySelector(".stories-bar-fill").style.animation = "";
-        bar.classList.add("active");
-      }
-    });
-  }
-
-  // ── 效果 1：滑动 ─────────────────────────────────────────
-  function animSlide(img, imgN, dir, onDone) {
-    imgN.style.cssText += `transition:none;transform:translateX(${-dir*100}%);opacity:1;`;
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      const t = "transform 0.38s cubic-bezier(.4,0,.2,1)";
-      img.style.transition  = t;
-      imgN.style.transition = t;
-      img.style.transform   = `translateX(${dir*100}%)`;
-      imgN.style.transform  = "translateX(0%)";
-      setTimeout(() => {
-        img.src = imgN.src;
-        img.style.cssText  += "transition:none;transform:translateX(0%);";
-        imgN.style.opacity  = "0";
-        imgN.style.transform = "none";
-        onDone();
-      }, 380);
-    }));
-  }
-
-  // ── 效果 2：缩放爆破 ──────────────────────────────────────
-  function animZoom(img, imgN, dir, onDone) {
-    imgN.style.cssText += "transition:none;transform:scale(1.25);opacity:0;";
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      const t = "transform 0.35s ease, opacity 0.35s ease";
-      img.style.transition  = t;
-      imgN.style.transition = t;
-      img.style.transform   = "scale(0.75)";
-      img.style.opacity     = "0";
-      imgN.style.transform  = "scale(1)";
-      imgN.style.opacity    = "1";
-      setTimeout(() => {
-        img.src = imgN.src;
-        img.style.cssText += "transition:none;transform:scale(1);opacity:1;";
-        imgN.style.opacity = "0";
-        imgN.style.transform = "none";
-        onDone();
-      }, 350);
-    }));
-  }
-
-  // ── 效果 3：斜角刮擦 ──────────────────────────────────────
-  function animWipe(img, imgN, dir, onDone) {
-    imgN.style.cssText += "transition:none;opacity:1;transform:none;clip-path:polygon(0 0,0 0,0 100%,0 100%);";
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      imgN.style.transition = "clip-path 0.45s ease";
-      imgN.style.clipPath   = "polygon(0 0,100% 0,100% 100%,0 100%)";
-      setTimeout(() => {
-        img.src = imgN.src;
-        imgN.style.opacity   = "0";
-        imgN.style.clipPath  = "none";
-        imgN.style.transition = "none";
-        onDone();
-      }, 450);
-    }));
-  }
-
-  // ── 效果 4：翻牌 ─────────────────────────────────────────
-  function animFlip(img, imgN, dir, onDone) {
-    img.style.transition = "transform 0.22s ease-in";
-    img.style.transform  = `rotateY(${dir * 90}deg)`;
-    setTimeout(() => {
-      img.style.transition = "none";
-      img.style.transform  = "rotateY(0deg)";
-      img.src = imgN.src;
-      img.style.transform  = `rotateY(${-dir * 90}deg)`;
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        img.style.transition = "transform 0.22s ease-out";
-        img.style.transform  = "rotateY(0deg)";
-        setTimeout(onDone, 220);
-      }));
-    }, 220);
-  }
-
-  // ── 主切换函数 ────────────────────────────────────────────
-  function storiesGo(i) {
-    const next = (i + STORIES.length) % STORIES.length;
-    clearTimeout(sTimer);
-    sPaused = false;
-    sElapsed = 0;
-
-    if (next === sIdx) {
-      updateBars();
-      sTimer = setTimeout(() => storiesGo(sIdx + 1), STORY_DUR);
-      return;
-    }
-
-    if (sAnimating) return;
-    sAnimating = true;
-
-    const goingForward = (next > sIdx)
-      ? !(sIdx === 0 && next === STORIES.length - 1)
-      : (sIdx === STORIES.length - 1 && next === 0);
-    const dir = goingForward ? -1 : 1;
-
-    sIdx = next;
-    updateBars();
-
-    const img    = document.getElementById("storiesImg");
-    const imgN   = document.getElementById("storiesImgNext");
-    const bg     = document.getElementById("storiesBg");
-    const bgNext = document.getElementById("storiesBgNext");
-    imgN.src   = STORIES[sIdx];
-    bgNext.src = STORIES[sIdx];
-
-    const onDone = () => {
-      bg.src = STORIES[sIdx];
-      sAnimating = false;
-      sTimer = setTimeout(() => storiesGo(sIdx + 1), STORY_DUR);
-    };
-
-    animZoom(img, imgN, dir, onDone);
-  }
-
-  function storiesNext() { storiesGo(sIdx + 1); }
-  function storiesPrev() { storiesGo(sIdx - 1); }
-
-  function initConfetti() {
-    const wrap   = document.getElementById("confettiWrap");
-    const colors = ["#CC0000","#FFD700","#F0D080","#FF6B6B","#FFA500","#fff","#C9A84C"];
-    const count  = 28;
-
-    for (let i = 0; i < count; i++) {
-      const el = document.createElement("div");
-      el.className = "confetti-piece";
-      el.style.cssText = `
-        left: ${Math.random() * 100}%;
-        width: ${Math.random() * 6 + 5}px;
-        height: ${Math.random() * 10 + 10}px;
-        background: ${colors[Math.floor(Math.random() * colors.length)]};
-        animation-duration: ${Math.random() * 8 + 7}s;
-        animation-delay: ${Math.random() * 8}s;
-        border-radius: ${Math.random() > 0.5 ? "50%" : "2px"};
-        opacity: ${Math.random() * 0.5 + 0.3};
-      `;
-      wrap.appendChild(el);
-    }
-  }
-</script>
-
+    })();
+  </script>
 </body>
 </html>
