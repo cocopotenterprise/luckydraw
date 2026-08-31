@@ -1140,7 +1140,17 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      cursor: zoom-in;
+      transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
     }
+
+    .prize-grid > div:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold) !important;
+      box-shadow: 0 5px 18px rgba(201,168,76,0.2);
+    }
+
+    .prize-grid > div:active { transform: scale(0.98); }
 
     @media (max-width: 600px) {
       .prize-grid {
@@ -1827,110 +1837,111 @@
           <img class="prize-photo" src="./images/prizes7.jpg"  alt="时尚手表 15 份"          style="width:100%;border-radius:10px;box-shadow:0 3px 14px rgba(0,0,0,0.08);" onclick="openLightbox(this.src)">
         </div>
 
-        <!-- Prize list -->
+        <!-- Prize list（点击任意奖品可查看对应大图，可左右滑动） -->
+        <div style="font-size:12px;color:var(--muted);margin-top:22px;margin-bottom:10px;">👆 点击任意奖品，查看对应奖品大图</div>
         <div class="prize-grid">
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes2.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">❄️</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">MIDEA 810L 对开门冰箱</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM3999 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes4.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">📱</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">OPPO Reno14 5G</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM2099 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes3.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">📺</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">TCL QLED 4K 电视 55"</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM2099 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes5.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🌀</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">TOSHIBA 12KG 变频波轮洗衣机</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM1399 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes6.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">📱</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">vivo V60 Lite 5G（Pop Pink）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM1199 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes8.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🔥</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">MIDEA 25L 烧烤微波炉</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM499 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes9.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">💨</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">MIDEA 塔扇</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM349 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes9.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🌬️</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">MIDEA HEPA 空气净化器</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM349 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes9.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🍟</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">TOSHIBA 5L 数码空气炸锅</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM299 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes10.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🍳</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">TEFAL So Matcha 4 件锅具套装</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM259 · × 1 套</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes9.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🍚</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">MIDEA 1.8L 数码电饭锅</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM209 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes10.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">♨️</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">MIDEA 2200W 电磁炉</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM189 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes10.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🫧</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">FABER 1.5L 复古破壁机（黑）</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM134 · × 1 台</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes11.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">👔</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">Philips 三合一挂烫机</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM354 · × 3 份</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes11.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🧹</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">GAABOR 18000PA 二合一无线吸尘器</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM389 · × 3 份</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes12.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🥘</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">19L 多层食物蒸炉</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM177 · × 5 份</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes12.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🥡</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">CENTO 8 合 1 玻璃保鲜盒套装</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM115 · × 5 份</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes12.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🧴</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">ACE 32oz 保温水壶</div><div class="prize-count" style="font-size:12px;color:var(--muted);">价值 RM103 · × 5 份</div></div>
           </div>
 
-          <div style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes7.jpg')" style="background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">⌚</span>
             <div><div class="prize-name" style="font-weight:700;color:var(--text);font-size:14px;">时尚手表</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 15 份</div></div>
           </div>
 
-          <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes11.jpg')" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🛍️</span>
             <div><div class="prize-name" style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM88</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 50 份</div></div>
           </div>
 
-          <div style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
+          <div onclick="openLightbox('./images/prizes11.jpg')" style="background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(240,208,128,0.12));border:1px solid rgba(201,168,76,0.3);border-radius:12px;padding:16px 18px;display:flex;align-items:center;gap:12px;">
             <span style="font-size:28px;">🛍️</span>
             <div><div class="prize-name" style="font-weight:700;color:#8a6a00;font-size:14px;">购物券 RM38</div><div class="prize-count" style="font-size:12px;color:var(--muted);">× 50 份</div></div>
           </div>
@@ -2532,7 +2543,8 @@
 
   function openLightbox(src) {
     lbList = Array.from(document.querySelectorAll(".prize-photo")).map(el => el.src);
-    const i = lbList.indexOf(src);
+    const abs = new URL(src, location.href).href;
+    const i = lbList.indexOf(abs);
     lbIdx = i < 0 ? 0 : i;
     lightboxShow();
     document.getElementById("lightbox").classList.add("open");
